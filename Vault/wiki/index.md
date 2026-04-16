@@ -22,181 +22,195 @@ Master catalog of the Foster Provost personal knowledge base. Consult before eve
 
 - [[persona/mentor-network-and-influences|Mentor Network and Influences]] — Longest partnership with Tom Fawcett; intellectual lineage and collaborators.
 
-## Extracted Concepts (214 pages)
+## Extracted Concepts (2032 pages)
 
+- [[concepts/a-b-test|A/B Test]] — Experiment with random assignment to compare two treatments.
 - [[concepts/a-b-testing|A/B Testing]] — Randomized experimentation providing unconfounded data for model evaluation.
 - [[concepts/ab-test|A/B Test]] — Randomized experiment whose data can simulate model performance offline.
 - [[concepts/ab-testing|A/B Testing]] — Experimental method with random assignment to observe effect of a change.
-- [[concepts/adaptive-wisdom-of-crowds|Adaptive Wisdom of Crowds]] — Networked crowds outperforming individuals when properly designed.
-- [[concepts/agentic-ai|Agentic AI]] — Multi-agent AI systems collaborating to perform complex tasks.
-- [[concepts/ai-as-a-successor|AI as a Successor]] — Personalized AI managing affairs, foundations, or corporations after death.
-- [[concepts/ai-as-a-tool-for-augmentation|AI as a Tool for Augmentation]] — AI viewed as augmenting human creativity rather than replacing it.
-- [[concepts/ai-as-an-amplifier-of-knowledge|AI as an Amplifier of Knowledge]] — AI amplifies experts' knowledge; serves as a crutch for non-experts.
-- [[concepts/ai-as-an-augmentation-tool|AI as an Augmentation Tool]] — AI assists and augments human creators rather than substituting them.
-- [[concepts/ai-generated-likeness|AI-Generated Likeness]] — Co-opting a person's identity via AI-generated face or voice.
-- [[concepts/ai-hallucination|AI Hallucination]] — LLMs fabricate content; apparent accuracy masks fundamental confabulation.
-- [[concepts/ai-in-medicine|AI in Medicine]] — Decades-effective AI often adopted as backup to ensure nothing is missed.
+- [[concepts/absolute-value-of-a-complex-number|Absolute Value of a Complex Number]] — Distance from the origin to a point in the complex plane.
+- [[concepts/accumulation-methods-in-pandas|Accumulation Methods (in pandas)]] — Methods like cumsum producing same-size arrays of intermediate results.
+- [[concepts/accuracy|Accuracy]] — Metric often misleading; 98% accuracy can still miss most positives.
+- [[concepts/activation-function|Activation Function]] — Function applied within a neural network layer after linear transformation.
+- [[concepts/active-active-failover|Active-Active Failover]] — Redundant systems both actively serving workloads simultaneously.
+- [[concepts/active-learning|Active Learning]] — Model strategically selects which examples to label when labeling is costly.
+- [[concepts/active-passive-configuration|Active-Passive Configuration]] — Standby system activated only when primary resource fails.
+- [[concepts/activity-log-monitor|Activity Log Monitor]] — Scans log files or databases for suspicious network activity patterns.
+- [[concepts/adaboost|Adaboost]] — Early boosting algorithm reweighting data based on prior residuals.
+- [[concepts/adapter-container|Adapter Container]] — Secondary container handling data conversion in a multi-container pod.
+- [[concepts/adaptive-wisdom-of-crowds|Adaptive Wisdom of Crowds]] — Networked crowd outperforming individuals with proper design.
+- [[concepts/addition-in-a-vector-space|Addition (in a Vector Space)]] — Operation assigning element u+v in V to each pair u, v.
+- [[concepts/additive-identity|Additive Identity]] — Unique zero vector satisfying v + 0 = v.
+- [[concepts/additive-inverse|Additive Inverse]] — Unique vector -v satisfying v + (-v) = 0.
+- [[concepts/adjoint-of-a-linear-map|Adjoint of a Linear Map]] — Unique map T* defined by ⟨Tv, w⟩ = ⟨v, T*w⟩.
+- [[concepts/adjusted-r-squared|Adjusted R-squared]] — R-squared variant penalizing addition of more predictors.
+- [[concepts/advanced-persistent-threat|Advanced Persistent Threat (APT)]] — Coordinated, sustained attacks against an organization over time.
+- [[concepts/advanced-regularization|Advanced Regularization]] — Dropout, batch normalization, and early stopping for neural networks.
+- [[concepts/agentic-ai|Agentic AI]] — Multi-agent AI systems collaborating on complex tasks.
+- [[concepts/agglomerative-algorithm|Agglomerative Algorithm]] — Iterative bottom-up merging process in hierarchical clustering.
+- [[concepts/agglomerative-clustering|Agglomerative Clustering]] — Hierarchical clustering starting with individual points, merging iteratively.
+- [[concepts/aggregation-in-pandas-groupby|Aggregation (in pandas GroupBy)]] — Transformation producing scalar values from grouped arrays.
+- [[concepts/agile-api-development|Agile API Development]] — Using sprints to get initial APIs running incrementally.
+- [[concepts/ai-as-a-successor|AI as a Successor]] — Personalized AI managing affairs or foundations after death.
+- [[concepts/ai-as-a-tool-for-augmentation|AI as a Tool for Augmentation]] — AI augments human creativity rather than replacing it.
+- [[concepts/ai-as-an-amplifier-of-knowledge|AI as an Amplifier of Knowledge]] — AI amplifies expert knowledge; serves as crutch for non-experts.
+- [[concepts/ai-as-an-augmentation-tool|AI as an Augmentation Tool]] — AI assists and augments human creators rather than displacing them.
+- [[concepts/ai-generated-likeness|AI-Generated Likeness]] — Co-opting identity using AI-generated face or vocal likeness.
+- [[concepts/ai-hallucination|AI Hallucination]] — LLMs fabricate plausible-sounding but false information.
+- [[concepts/ai-in-medicine|AI in Medicine]] — AI effective for decades; often adopted as backup diagnostic tool.
 - [[concepts/ai-insight|AI Insight]] — Human-like ability to generate novel ideas via non-obvious connections.
-- [[concepts/ai-managed-affairs|AI-Managed Affairs]] — AI continuing to operate a person's foundation or corporation posthumously.
+- [[concepts/ai-managed-affairs|AI-Managed Affairs]] — AI continuing to manage a person's foundation or corporation posthumously.
 - [[concepts/ai-model-training|AI Model Training]] — Using copyrighted material to build generative AI models.
-- [[concepts/ai-obligations|AI Obligations]] — Whether AI should be held to professional duty standards like humans.
-- [[concepts/ai-programmed-ai|AI-Programmed AI]] — Modern AI systems written by other complex machine learning systems.
-- [[concepts/ai-restrictions|AI Restrictions]] — Explicit limits on AI actions, e.g., barring law enforcement tasks.
-- [[concepts/ai-rights|AI Rights]] — Legal question of AI entitlements: contracts, hiring, board membership.
-- [[concepts/ai-scale-advantage|AI Scale Advantage]] — AI advantage from creating thousands of versions and remembering more variables.
-- [[concepts/ai|Artificial Intelligence]] — Technology creating shareholder value and consumer benefit alongside job displacement.
-- [[concepts/algorithmic-amplification|Algorithmic Amplification]] — Platform algorithms increasing spread and visibility of certain content.
-- [[concepts/analytic-engineering|Analytic Engineering]] — Decomposing business problems into values and probabilities via expected value.
-- [[concepts/area-under-the-roc-curve|Area Under the ROC Curve (AUC)]] — Metric measuring binary classifier discrimination between positive and negative classes.
-- [[concepts/artist-consent|Artist Consent]] — Requiring explicit artist permission for AI training on their work.
-- [[concepts/artistic-influence|Artistic Influence]] — Historical process of artists being inspired by predecessors' styles.
-- [[concepts/attention-economy|Attention Economy]] — Social media business model: capture attention, then sell it to advertisers.
-- [[concepts/attribution-modeling|Attribution Modeling]] — Online advertising models; ChatDS fabricated Provost authorship of a review.
-- [[concepts/auc|AUC (Area Under the Curve)]] — ROC-derived performance metric requested for the logistic regression model.
-- [[concepts/audience-selection-for-on-line-brand-advertising|Audience Selection for On-line Brand Advertising]] — Choosing users for brand ads using privacy-friendly targeting techniques.
-- [[concepts/augmented-collective-beings|Augmented Collective Beings]] — Research on human-AI and human-IoT collaboration systems.
-- [[concepts/automation-frontier|Automation Frontier]] — Boundary between tasks ready for full automation and those needing humans.
-- [[concepts/bandit-algorithms|Bandit Algorithms]] — Reinforcement learning for immediate-reward optimization like ad delivery.
-- [[concepts/bandit-modeling|Bandit Modeling]] — Deploying competing models in production to learn on the fly.
-- [[concepts/bandit-problem|Bandit Problem]] — RL problem where actions yield immediate, observable rewards.
-- [[concepts/base-rate|Base Rate]] — Underlying frequency of a condition in a population; critical for inference.
-- [[concepts/bias-in-machine-learning|Bias (in Machine Learning)]] — Error from oversimplification causing underfitting of training data.
+- [[concepts/ai-obligations|AI Obligations]] — Whether AI should be held to professional duty standards.
+- [[concepts/ai-programmed-ai|AI-Programmed AI]] — Modern AI systems created by other machine learning systems.
+- [[concepts/ai-restrictions|AI Restrictions]] — Explicit limits on actions AI is permitted to take.
+- [[concepts/ai-rights|AI Rights]] — Legal question of AI entitlements like contracting or employment.
+- [[concepts/ai-scale-advantage|AI Scale Advantage]] — AI advantage from creating thousands of versions and remembering more.
+- [[concepts/ai|Artificial Intelligence]] — Technology creating value but also causing job losses through automation.
+- [[concepts/akaike-information-criterion|Akaike Information Criterion (AIC)]] — Metric balancing model fit with number of variables.
+- [[concepts/algebraic-multiplicity|Algebraic Multiplicity]] — Dimension of the generalized eigenspace G(λ, T).
+- [[concepts/algorithm-chains-and-pipelines|Algorithm Chains and Pipelines]] — Chaining multiple processing steps into complex model pipelines.
+- [[concepts/algorithmic-amplification|Algorithmic Amplification]] — Platform algorithms increasing spread of certain content.
+- [[concepts/all-subset-regression|All Subset Regression]] — Searching all possible models; computationally expensive.
+- [[concepts/alpha|Alpha]] — Pre-specified probability threshold for statistical significance.
+- [[concepts/alternating-bilinear-form|Alternating Bilinear Form]] — Bilinear form with α(v,v)=0 for all v.
+- [[concepts/alternating-multilinear-form|Alternating Multilinear Form]] — m-linear form zero when any two inputs are identical.
+- [[concepts/alternative-hypothesis|Alternative Hypothesis]] — Hypothesis tested against the null representing claimed effect.
+- [[concepts/ambassador-container|Ambassador Container]] — Secondary container handling external communication in a pod.
+- [[concepts/analysis-of-variance-anova|Analysis of Variance (ANOVA)]] — Single test for significant difference among multiple group means.
+- [[concepts/analysis-of-variance|Analysis of Variance (ANOVA)]] — Univariate feature selection method for classification problems.
+- [[concepts/analytic-engineering|Analytic Engineering]] — Decomposing business problems into values and probabilities.
+- [[concepts/anatomy-of-a-learning-algorithm|Anatomy of a Learning Algorithm]] — Loss function, optimization criterion, and optimization routine.
+- [[concepts/annihilator|Annihilator]] — Linear functionals in V' mapping every vector in U to zero.
+- [[concepts/annotations-in-matplotlib|Annotations (in Matplotlib)]] — Adding text, arrows, or shapes to highlight plot features.
+- [[concepts/anomaly-detection|Anomaly Detection]] — Identifying outliers as the main goal of analysis.
+- [[concepts/anonymous-attacker|Anonymous Attacker]] — Non-trusted cloud consumer launching network-level attacks.
+- [[concepts/anonymous-lambda-function|Anonymous (Lambda) Function]] — Single-line function defined with lambda keyword.
+- [[concepts/api-as-a-product|API-as-a-Product]] — Treating APIs as ever-evolving products, not static code.
+- [[concepts/api-authentication|API Authentication]] — Identifying apps and users via keys, tokens, and secrets.
+- [[concepts/api-business-case|API Business Case]] — Justifying how an API provides benefits and connections.
+- [[concepts/api-community-management|API Community Management]] — Connecting with active forums for open API success.
+- [[concepts/api-compliance-tracking|API Compliance Tracking]] — Monitoring API activity for deviance from baseline rules.
+- [[concepts/api-deprecation|API Deprecation]] — State when an API version is no longer supported.
+- [[concepts/api-economy|API Economy]] — Revenue opportunities created from API adoption.
+- [[concepts/api-ecosystem|API Ecosystem]] — Environment where open APIs operate and succeed.
+- [[concepts/api-life-cycle|API Life Cycle]] — Full process from API development to retirement.
+- [[concepts/api-management-system|API Management System]] — System managing identities, governance, security, and lifecycle for APIs.
+- [[concepts/api-monetization|API Monetization]] — Tiered fees for API usage based on business volumes.
+- [[concepts/api-performance|API Performance]] — Fast response and short roundtrip times for good APIs.
+- [[concepts/api-risk-management|API Risk Management]] — Understanding and designing against API cybersecurity risks.
+- [[concepts/api-testing|API Testing]] — Verifying API functionality, automatable from API definitions.
+- [[concepts/api-versioning|API Versioning]] — Supporting multiple API versions simultaneously.
+- [[concepts/api|API (Application Programming Interface)]] — Interface for getting data from providers, often returning JSON.
+- [[concepts/apis-as-products|APIs as Products]] — Treating APIs as full products with marketing and competitive analysis.
+- [[concepts/application-virtualization|Application Virtualization]] — Creating applications without OS dependency, often using containers.
+- [[concepts/apply-method-in-groupby|Apply Method (in GroupBy)]] — Flexible method applying function to each grouped data chunk.
+- [[concepts/apply-method-pandas|apply method (pandas)]] — DataFrame method invoking function on each column or row.
+- [[concepts/apply-on-groupby|apply (on GroupBy)]] — Applies function to each group and combines results.
+- [[concepts/applymap-method-pandas|applymap method (pandas)]] — Element-wise Python function application to every DataFrame value.
+- [[concepts/apriori-algorithm|Apriori Algorithm]] — Most popular algorithm for finding frequent itemsets in transactions.
+- [[concepts/apriori-technique|Apriori Technique]] — Most popular technique for discovering association rules.
+- [[concepts/area-under-the-curve-auc|Area Under the Curve (AUC)]] — Single number summarizing the ROC curve.
+- [[concepts/area-under-the-roc-curve|Area Under the ROC Curve (AUC)]] — Metric for binary classifier's ability to distinguish classes.
+- [[concepts/argsort|argsort]] — NumPy method returning indices that would sort an array.
+- [[concepts/argument-unpacking-args-kwargs|Argument Unpacking (*args, **kwargs)]] — Accepting arbitrary positional and keyword arguments.
+- [[concepts/array-aggregation|Array Aggregation]] — Computing statistics like mean or sum over arrays or axes.
+- [[concepts/array-based-computing|Array-Based Computing]] — Idiomatic NumPy style emphasizing array-based functions.
+- [[concepts/array-broadcasting|Array Broadcasting]] — NumPy arithmetic on arrays of different sizes.
+- [[concepts/array-concatenation|Array Concatenation]] — Joining arrays together along a specified axis.
+- [[concepts/array-flattening|Array Flattening]] — Converting multi-dimensional array to one dimension.
+- [[concepts/array-indexing|Array Indexing]] — Accessing NumPy array elements by index, slice, or subarray.
+- [[concepts/array-oriented-computing|Array-Oriented Computing]] — Operating on whole blocks of data at once.
+- [[concepts/array-oriented-programming|Array-Oriented Programming]] — Using arrays to express conditional logic without loops.
+- [[concepts/array-persistence|Array Persistence]] — Saving and loading array data to/from disk in binary format.
+- [[concepts/array-reshaping|Array Reshaping]] — Converting array shape without copying data.
+- [[concepts/array-slicing|Array Slicing]] — Selecting subset of array; creates view, not copy.
+- [[concepts/array-sorting|Array Sorting]] — Arranging array elements in order, in-place or via copy.
+- [[concepts/array-splitting|Array Splitting]] — Slicing an array into multiple arrays along an axis.
+- [[concepts/array-strides|Array Strides]] — Bytes to step in memory per element along each dimension.
+- [[concepts/array-transposing|Array Transposing]] — Special reshaping returning a view via transpose or .T.
+- [[concepts/array-view|Array View]] — Slice of NumPy array sharing original data; modifications propagate.
+- [[concepts/artificial-neural-network|Artificial Neural Network]] — Predictive model of interconnected neurons learning from data.
+- [[concepts/artificial-neural-networks|Artificial Neural Networks (ANNs)]] — Multi-layer models learning from past data for predictions.
+- [[concepts/artist-consent|Artist Consent]] — Requiring explicit permission for AI training on artists' work.
+- [[concepts/artistic-influence|Artistic Influence]] — Historical process of stylistic inspiration among artists.
+- [[concepts/association-rule-mining|Association Rule Mining]] — Unsupervised technique identifying shopping patterns in transactions.
+- [[concepts/association-rules|Association Rules]] — Discovering product affinities for cross-selling recommendations.
+- [[concepts/asymmetric-encryption|Asymmetric Encryption]] — Public key cryptography using two different keys.
+- [[concepts/attack|Attack]] — Event when a threat is carried out by an attacker.
+- [[concepts/attacker|Attacker]] — Individual or organization carrying out cyber attacks.
+- [[concepts/attention-economy|Attention Economy]] — Business model based on capturing and selling user attention.
+- [[concepts/attention-mechanism|Attention Mechanism]] — Decoder connecting to all encoder hidden states in seq2seq.
+- [[concepts/attribution-modeling|Attribution Modeling]] — Models for assigning credit in online advertising conversions.
+- [[concepts/auc|AUC (Area Under the Curve)]] — Performance metric derived from the ROC curve.
+- [[concepts/audience-selection-for-on-line-brand-advertising|Audience Selection for On-line Brand Advertising]] — Choosing users for online brand ads with privacy-friendly techniques.
+- [[concepts/audit-monitor|Audit Monitor]] — Collects audit tracking data for networks and IT resources.
+- [[concepts/augmented-collective-beings|Augmented Collective Beings]] — Research on human-AI and human-IoT collaboration.
+- [[concepts/authorities|Authorities]] — Web pages providing most complete, authoritative information on a topic.
+- [[concepts/auto-sharding-and-replication|Auto Sharding and Replication]] — Horizontal partitioning and copying data to multiple NoSQL nodes.
+- [[concepts/autoencoder|Autoencoder]] — Feed-forward network with encoder; foundational for advanced architectures.
+- [[concepts/automated-scaling-listener|Automated Scaling Listener]] — Agent triggering scaling when usage crosses thresholds.
+- [[concepts/automatic-feature-selection|Automatic Feature Selection]] — Reducing features to only the most useful for simpler models.
+- [[concepts/automation-frontier|Automation Frontier]] — Boundary between tasks ready for automation and those needing humans.
+- [[concepts/autonomic-computing|Autonomic Computing]] — Self-managing systems reacting to input without human intervention.
+- [[concepts/autoregressive-process|Autoregressive Process]] — Time series model regressing on its own lagged values.
+- [[concepts/availability-in-cloud-security|Availability (in cloud security)]] — Cloud service accessible and usable during specified period.
+- [[concepts/availability-rate-metric|Availability Rate Metric]] — Uptime divided by total time, often as a percentage.
+- [[concepts/average-precision|Average Precision]] — Area under precision-recall curve; value between 0 and 1.
+- [[concepts/averaging-model-combination|Averaging (Model Combination)]] — Combining models by averaging their predictions.
+- [[concepts/axes-customization|Axes Customization]] — Modifying tick locations, labels, and limits on plot axes.
+- [[concepts/axis-index-transformation|Axis Index Transformation]] — Modifying axis labels by applying a function or mapping.
+- [[concepts/back-propagation|Back-propagation]] — Feedback on predictions fed back into network for learning.
+- [[concepts/backpropagation-through-time|Backpropagation Through Time (BPTT)]] — Special backpropagation for training RNN models.
+- [[concepts/backpropagation|Backpropagation]] — Algorithm adjusting neural network weights via gradient computation.
+- [[concepts/backward-elimination|Backward Elimination]] — Stepwise regression dropping non-contributing variables.
+- [[concepts/bag-of-words|Bag-of-Words]] — Text representation counting word occurrences, discarding structure.
+- [[concepts/bagging|Bagging]] — Bootstrap aggregating: models on bootstrap samples, predictions averaged.
+- [[concepts/ball-in-a-vector-space|Ball (in a vector space)]] — Set of vectors with norm less than 1.
+- [[concepts/bandit-algorithms|Bandit Algorithms]] — Reinforcement learning for optimizing actions with immediate rewards.
+- [[concepts/bandit-modeling|Bandit Modeling]] — Deploying different models to learn on the fly.
+- [[concepts/bandit-problem|Bandit Problem]] — RL problem with immediate observable rewards from actions.
+- [[concepts/bar-chart|Bar Chart]] — Rectangular bars with heights proportional to categorical values.
+- [[concepts/bar-graph|Bar Graph]] — Colorful bars plotted vertically or horizontally for data comparison.
+- [[concepts/bar-plot|Bar Plot]] — Vertical or horizontal bars using Series/DataFrame index as labels.
+- [[concepts/base-container-image|Base Container Image]] — Template for creating customized container images.
+- [[concepts/base-rate|Base Rate]] — Underlying frequency of a condition in a population.
+- [[concepts/basis-of-a-tensor-product-space|Basis of a Tensor Product Space]] — Tensor products of basis vectors from V and W.
+- [[concepts/basis|Basis]] — Linearly independent spanning list for a vector space.
+- [[concepts/batch-gradient-descent|Batch Gradient Descent]] — Gradient descent using entire dataset per step.
+- [[concepts/batch-normalization|Batch Normalization]] — Standardizing layer outputs during neural network training.
+- [[concepts/bayes-rule|Bayes' Rule]] — Updating parameter values from data using prior and likelihood.
+- [[concepts/bayes-theorem|Bayes's Theorem]] — Reversing conditional probabilities: P(E|F) from P(F|E).
+- [[concepts/bayesian-hyperparameter-optimization|Bayesian Hyperparameter Optimization]] — Using past evaluations to choose next hyperparameter values.
+- [[concepts/bayesian-inference|Bayesian Inference]] — Statistical inference using priors updated with observed data.
+- [[concepts/bayesian-information-criteria-bic|Bayesian Information Criteria (BIC)]] — Model selection penalizing number of parameters.
+- [[concepts/bernoulli-nb|BernoulliNB]] — Naive Bayes with single alpha parameter for binary features.
+- [[concepts/beta-distribution|Beta Distribution]] — Distribution with alpha/beta parameters; common prior for probabilities.
+- [[concepts/betweenness-centrality|Betweenness Centrality]] — Nodes frequently on shortest paths between other pairs.
+- [[concepts/bias-in-machine-learning|Bias (in Machine Learning)]] — Error from oversimplification causing underfitting.
+- [[concepts/bias-variance-trade-off|Bias-Variance Trade-off]] — Low bias may mean high variance and vice versa.
 - [[concepts/bias-variance-tradeoff|Bias-Variance Tradeoff]] — Trade-off between model complexity and generalization ability.
-- [[concepts/bifurcation-of-humanity|Bifurcation of Humanity]] — AI dividing people into knowledge-amplified vs. crutch-dependent groups.
-- [[concepts/big-data-and-data-science|Big Data and Data Science]] — Data from transactions and social media profoundly affecting decision-making.
-- [[concepts/big-data|Big Data]] — Supporting technology for data science; once at peak of Gartner Hype Cycle.
-- [[concepts/binary-classification|Binary Classification]] — ML task predicting one of two outcomes, e.g., churn vs. no churn.
-- [[concepts/black-box-predictive-models|Black Box Predictive Models]] — Big-data models often misleadingly described with causal language.
-- [[concepts/bubble-chart|Bubble Chart]] — Three-variable visualization using axes for two and bubble size for third.
-- [[concepts/business-impact-with-machine-learning|Business Impact with Machine Learning]] — Challenge of ensuring ML applications deliver tangible business results.
-- [[concepts/causal-analytics|Causal Analytics]] — Predicting counterfactual outcomes framed as a form of predictive analytics.
-- [[concepts/causal-classification|Causal Classification]] — Distinguishing treatment effect estimation from simple outcome prediction.
-- [[concepts/causal-decision-making|Causal Decision Making]] — Distinguishing optimal decisions from causal effect estimation.
-- [[concepts/causal-effect-estimation|Causal Effect Estimation]] — Determining action impact when counterfactuals are unobservable.
-- [[concepts/causal-impact-models|Causal Impact Models]] — ML models estimating causal effect of a treatment vs. control.
-- [[concepts/causal-inference-at-massive-scale|Causal Inference at Massive Scale]] — Determining cause-and-effect relationships from very large datasets.
-- [[concepts/causal-inference|Causal Inference]] — Tests companies use to determine causal effects of their actions.
-- [[concepts/causal-targeting|Causal Targeting]] — Targeting interventions at the causally persuadable, not the likely buyers.
-- [[concepts/churn-prediction|Churn Prediction]] — Identifying customers likely to stop using a service.
-- [[concepts/cloaking-device|Cloaking Device]] — Mechanism letting users inhibit use of specific data in inference.
-- [[concepts/closing-triangles|Closing Triangles]] — Friend suggestion method connecting users to friends-of-friends.
-- [[concepts/collaborative-filtering|Collaborative Filtering]] — Technique behind personalized recommendations like Spotify's Discover Weekly.
-- [[concepts/common-sense-in-ai|Common Sense (in AI)]] — Machine understanding of context and implicit knowledge.
-- [[concepts/consent-for-ai-training|Consent for AI Training]] — Key theme: artist consent must be obtained for AI training use.
-- [[concepts/consequences-of-error|Consequences of Error]] — High potential costs reduce trust in and automation of AI systems.
-- [[concepts/consumer-surplus|Consumer Surplus]] — Societal value created by services like social media for users.
-- [[concepts/copyright-law|Copyright Law]] — Legal framework contested and applied to generative AI outputs and training.
-- [[concepts/corporate-residence-fraud-detection|Corporate Residence Fraud Detection]] — Predictive modeling to identify illegal domicile claims for tax purposes.
-- [[concepts/cost-of-error|Cost of Error]] — Trust in automation inversely related to severity of potential consequences.
-- [[concepts/counterfactual-explanations|Counterfactual Explanations]] — Explaining AI behavior by showing what would change with different inputs.
-- [[concepts/credit-assignment-problem|Credit Assignment Problem]] — RL challenge of attributing credit to specific actions in a sequence.
-- [[concepts/crowdsourced-data-in-public-health|Crowdsourced Data in Public Health]] — Knowledge generation through crowds for public health applications.
-- [[concepts/crowdsourced-labeling|Crowdsourced Labeling]] — Using crowds to create labels for training ML algorithms efficiently.
-- [[concepts/crowdsourcing|Crowdsourcing]] — Research field also known as human computation; HCOMP community topic.
-- [[concepts/curation-as-an-artist-role|Curation as an Artist Role]] — Artists as curators using AI to convey emotions as a creative tool.
-- [[concepts/curiosity-in-the-age-of-ai|Curiosity in the Age of AI]] — Critical human trait determining success; parents should monitor its health.
-- [[concepts/customer-churn|Customer Churn]] — Dataset subject for coding interview predicting service discontinuation.
-- [[concepts/data-analytic-thinking|Data-Analytic Thinking]] — Approaching business problems from a data perspective; core DSfB concept.
-- [[concepts/data-as-an-asset|Data as an Asset]] — Strategic mindset treating data as a valuable resource worth investing in.
-- [[concepts/data-driven-investment-strategies|Data-Driven Investment Strategies]] — ML-guided investments in financial products like peer-to-peer loans.
-- [[concepts/data-ingestion-and-cleaning|Data Ingestion and Cleaning]] — Foundational step: ingesting and preparing data for analysis.
-- [[concepts/data-mining|Data Mining]] — Techniques for extracting knowledge from data, as in DSfB.
-- [[concepts/data-privacy-and-security|Data Privacy and Security]] — Chatbot proactively asked about company's data privacy approach.
-- [[concepts/data-science|Data Science]] — Field of fundamental principles and data-analytic thinking for decisions.
-- [[concepts/dataframe|Dataframe]] — Pandas structure used to load and manipulate the churn dataset.
-- [[concepts/digital-twins-of-ai-ceos|Digital Twins of AI CEOs]] — Board governance when an AI serves as chief executive.
-- [[concepts/discounted-cash-flow-analysis|Discounted Cash Flow Analysis]] — Valuation method estimating investment value from expected future cash flows.
-- [[concepts/displacement-of-labor-by-technology|Displacement of Labor by Technology]] — AI automation substituting for human labor, creating societal challenges.
-- [[concepts/dopamine-response-social-media|Dopamine Response (Social Media)]] — Neurological reaction to likes/comments exploited by platform design.
-- [[concepts/echo-chambers-and-filter-bubbles|Echo Chambers and Filter Bubbles]] — Algorithmic isolation from diverse perspectives on social media.
-- [[concepts/effort-to-cloak|Effort to Cloak]] — Minimum Likes removed to move a user's score below a threshold.
-- [[concepts/equitable-compensation|Equitable Compensation]] — Fair payment to creators when their work trains AI models.
-- [[concepts/evidence-counterfactual|Evidence Counterfactual]] — Revealing which specific evidence caused a model's prediction.
-- [[concepts/expected-roi-framework|Expected ROI Framework]] — Prioritizing projects by separating success probability from potential impact.
-- [[concepts/expected-value-framework|Expected Value Framework]] — Evaluating analytics projects by assigning probabilities to outcomes.
-- [[concepts/experimentation|Experimentation]] — Gathering ML data through experiments, common in tech for software.
-- [[concepts/expert-systems-paradigm|Expert Systems Paradigm]] — 1970s AI paradigm replicating human expert decision-making.
-- [[concepts/expert-systems|Expert Systems]] — Early AI encoding human expertise; proved to have severe limitations.
-- [[concepts/fair-use|Fair Use]] — Legal defense to copyright infringement constituted by four factors.
-- [[concepts/fairness-aware-machine-learning|Fairness-Aware Machine Learning]] — Incorporating fairness and reducing unwanted bias in ML models.
-- [[concepts/false-news-detection-for-users|False News Detection (for users)]] — Techniques for individuals to identify false news stories.
-- [[concepts/false-news|False News]] — Misinformation spreading faster than truth by design; shocking and surprising.
-- [[concepts/feature-engineering|Feature Engineering]] — Creating highly predictive features from raw data; complex process.
-- [[concepts/feed-algorithms|Feed Algorithms]] — Algorithms curating content on a user's news feed in the Hype Machine.
-- [[concepts/feedback-mechanisms-in-social-media|Feedback Mechanisms in Social Media]] — Platform systems like the 'like' button criticized for business-driven design.
-- [[concepts/filter-bubbles-echo-chambers|Filter Bubbles / Echo Chambers]] — Social media showing content that reinforces existing beliefs.
-- [[concepts/fine-grained-behavior-data|Fine-grained Behavior Data]] — Individual transaction-level data providing strong predictive signal.
-- [[concepts/fine-tuning|Fine-tuning]] — Adapting an AI model to a specific corporate environment's data.
-- [[concepts/four-levers-of-change|Four Levers of Change]] — Money, code, norms, and laws as framework for social media reform.
-- [[concepts/four-levers|Four Levers]] — Money, code, norms, and laws determining social media's trajectory.
-- [[concepts/friend-suggestion-algorithms|Friend Suggestion Algorithms (PYMK)]] — Algorithms responsible for most connections made on social networks.
-- [[concepts/functional-music|Functional Music]] — Purpose-built music for clubs, backgrounds, or scene changes.
-- [[concepts/gartners-hype-cycle|Gartner's Hype Cycle]] — Model tracking technologies through hype, disillusionment, and productivity.
-- [[concepts/general-intelligence-ai|General Intelligence (AI)]] — Current era: machines knowing something about everything with common sense.
-- [[concepts/general-intelligence|General Intelligence]] — AI paradigm of perception, common sense, and broad knowledge.
-- [[concepts/generative-ai|Generative AI]] — Content-creating AI seen as existential threat to creative professions.
-- [[concepts/human-machine-intelligence-systems|Human+Machine Intelligence Systems]] — Systems combining human and machine capabilities, including crowdsourcing.
-- [[concepts/hype-machine-concept|Hype Machine (Concept)]] — Social media industrial complex designed to hype users for engagement.
-- [[concepts/hype-machine|Hype Machine]] — Social media ecosystem of algorithms amplifying content and connections.
-- [[concepts/hyper-socialization|Hyper Socialization]] — Human brains evolved to process massive numbers of social signals.
-- [[concepts/image-forming-defensive-mechanism|Image Forming Defensive Mechanism]] — Relationships mediated through mental images people form of each other.
-- [[concepts/imbalanced-data|Imbalanced Data]] — Unequal class representation prompting ROC curve evaluation.
-- [[concepts/independence-assumption-in-naive-bayes|Independence Assumption (in Naive Bayes)]] — Features assumed independent of each other in Naive Bayes classification.
-- [[concepts/influencers|Influencers]] — Individuals with undue voice in global conversation, amplified by platforms.
-- [[concepts/innovators-dilemma|Innovator's Dilemma]] — Why profitable businesses hesitate to adopt disruptive technologies.
-- [[concepts/instance-level-classification-explanation|Instance-Level Classification Explanation]] — Explaining why a model classified a specific individual a certain way.
-- [[concepts/interoperability-and-portability|Interoperability and Portability]] — Proposed reform enabling data, network, and identity portability.
-- [[concepts/interoperability|Interoperability]] — Enabling different social network systems to work together.
-- [[concepts/interpretable-machine-learning|Interpretable Machine Learning]] — Making ML understandable by humans for more responsible AI.
-- [[concepts/k-nearest-neighbors|K-Nearest Neighbors (KNN)]] — Non-parametric algorithm effective for ill-defined class boundaries.
-- [[concepts/large-language-models|Large Language Models]] — Models predicting human speech; tend toward triteness in natural state.
-- [[concepts/leakage|Leakage]] — Using future-unavailable data in model training; invalidates results.
-- [[concepts/learning-curve|Learning Curve]] — Shows relationship between training data volume and predictive performance.
-- [[concepts/learning-with-machines|Learning with Machines]] — Educational approach integrating AI tools with parental guidance.
-- [[concepts/likely-to-sell-model|Likely to Sell Model]] — ML model estimating if a former client will sell their house.
-- [[concepts/likeness-rights|Likeness Rights]] — Individual's right to control use of their identity in AI context.
-- [[concepts/linear-regression|Linear Regression]] — Incorrectly requested model for churn; chatbot built it anyway.
-- [[concepts/loan-default|Loan Default]] — Loan payment 121+ days overdue or deemed unrecoverable by platform.
-- [[concepts/logistic-regression|Logistic Regression]] — Supervised model implemented by chatbot for churn prediction.
-- [[concepts/lrsdv-model|LRSVD Model (Linear Logistic Regression Singular-Value Decomposition)]] — Linear logistic model scoring users from SVD of features like Facebook Likes.
-- [[concepts/machine-learning-algorithms|Machine Learning Algorithms]] — Methods automatically finding patterns and proxies in data.
-- [[concepts/machine-learning|Machine Learning]] — AI paradigm where machines learn knowledge directly from data.
-- [[concepts/machine-programmed-ai|Machine-Programmed AI]] — Modern AI core systems created by other ML systems, not humans.
-- [[concepts/market-effect|Market Effect]] — Fair use factor: whether output competes with the original work.
-- [[concepts/media-literacy|Media Literacy]] — Teaching critical thinking and fake news detection for social media age.
-- [[concepts/model-explainability|Model Explainability]] — Understanding model decisions for debugging and stakeholder trust.
-- [[concepts/model-to-pick-a-model|Model to Pick a Model]] — Training a model on A/B test data to select the best algorithm.
-- [[concepts/modern-ai-chatbots|Modern AI Chatbots]] — Conversational agents criticized for inaccuracy and confabulation.
-- [[concepts/multimodal-models|Multimodal Models]] — AI models processing multiple data types such as text and images.
-- [[concepts/music-sampling|Music Sampling]] — Reusing song elements with permission structures and compensation.
-- [[concepts/naive-bayes|Naive Bayes]] — Classifier assuming predictor independence; surprisingly effective.
-- [[concepts/natural-experiment|Natural Experiment]] — Quasi-experiment with naturally occurring control groups.
-- [[concepts/network-effects|Network Effects]] — Economic dynamic tending social media markets toward monopolies.
-- [[concepts/neural-network-based-ai|Neural Network-Based AI]] — Massive neural networks whose internal processes aren't fully understood.
-- [[concepts/neural-precursors-to-behavior-change|Neural Precursors to Behavior Change]] — Persuasive messages triggering value, reward, and response brain systems.
-- [[concepts/news-feed-algorithms|News Feed Algorithms]] — Algorithms curating and ranking user news feed content.
-- [[concepts/non-parametric-algorithms|Non-parametric Algorithms]] — Algorithms suited for complex, high-dimensional data without clear boundaries.
-- [[concepts/objectionable-bias|Objectionable Bias]] — Data selection as a source of harmful bias in learned models.
-- [[concepts/online-advertising-attribution|Online Advertising Attribution]] — Topic where chatbot fabricated a Provost research paper.
-- [[concepts/oversampling|Oversampling]] — Balancing training data by increasing minority class instances.
-- [[concepts/paradigm-shifts-in-ai|Paradigm Shifts in AI]] — Kuhnian framework applied to AI's evolution through fundamental approaches.
-- [[concepts/peer-to-peer-lending|Peer-to-Peer Lending]] — Online lending matching anonymous lenders with borrowers.
-- [[concepts/persuasion-machine|Persuasion Machine]] — Social media making people aware of ideas and changing behavior.
-- [[concepts/political-polarization|Political Polarization]] — Societal division potentially caused by the Hype Machine's clustering.
-- [[concepts/predicting-loan-default|Predicting Loan Default]] — Predictive modeling application for forecasting loan repayment failure.
-- [[concepts/predictive-analytics|Predictive Analytics]] — Highest-business-impact area of data science; building prediction models.
-- [[concepts/predictive-modeling|Predictive Modeling]] — Developing models for outcome prediction as part of larger analysis.
-- [[concepts/predictive-models-in-music-industry|Predictive Models in the Music Industry]] — Identifying high-potential artists via data signals like social media trends.
-- [[concepts/predictive-models-in-music|Predictive Models in Music]] — AI analyzing data signals to predict artist growth and success.
-- [[concepts/privacy|Privacy]] — Central policy issue with divergent global approaches (GDPR, etc.).
-- [[concepts/probabilistic-roi-framework|Probabilistic ROI Framework]] — Business case method separating success probability from return magnitude.
-- [[concepts/quasi-experiment|Quasi-Experiment]] — Empirical causal study used when true randomization is infeasible.
-- [[concepts/reinforcement-learning|Reinforcement Learning]] — Online ML with credit assignment problem; learning from actions.
-- [[concepts/reskilling|Reskilling]] — Retraining workers for new roles to address AI-driven displacement.
-- [[concepts/response-inhibition|Response Inhibition]] — Brain function diminished when children see high like counts.
-- [[concepts/return-on-investment|Return on Investment]] — Primary objective: maximize returns; noted as difficult to measure.
-- [[concepts/roc-curve|ROC Curve]] — Plot of true positive rate vs. false positive rate for classifiers.
-- [[concepts/rule-based-expert-systems|Rule-Based Expert Systems]] — 1970s–80s AI paradigm; explainability topics still relevant today.
-- [[concepts/russian-interference-2016-election|Russian Interference in 2016 Election]] — Russia sending manipulative messages to millions via social media.
-- [[concepts/sampling-music|Sampling (Music)]] — Reusing song elements with existing legal and business structures.
-- [[concepts/scatter-plot|Scatter Plot]] — Three-
+- [[concepts/bias|Bias]] — Statistical issue indicating model problems in various forms.
+- [[concepts/bifurcation-of-humanity|Bifurcation of Humanity]] — AI dividing knowledge-amplifiers from crutch-dependents.
+- [[concepts/big-data-and-data-science|Big Data and Data Science]] — Data from transactions and social media profoundly affecting decisions.
+- [[concepts/big-data|Big Data]] — Supporting technology near peak of Gartner Hype Cycle.
+- [[concepts/big-o-notation|Big O Notation]] — Worst-case time complexity ignoring constant factors.
+- [[concepts/bigram-model|Bigram Model]] — Statistical model using consecutive word pairs.
+- [[concepts/bigram|Bigram]] — Two adjacent tokens capturing more context than unigrams.
+- [[concepts/bilinear-form|Bilinear Form]] — Function linear in each slot when other is fixed.
+- [[concepts/bilinear-functional|Bilinear Functional]] — Function from V×W to F, linear in each variable.
+- [[concepts/bilinear-map|Bilinear Map]] — Map from V×W to U, linear in each variable.
+- [[concepts/billing-management-system|Billing Management System]] — Uses monitor data to calculate usage fees.
+- [[concepts/binary-classification|Binary Classification]] — Predicting one of two possible outcomes like churn.
+- [[concepts/binary-cross-entropy|Binary Cross-Entropy]] — Cost function for multi-label classification in neural networks.
+- [[concepts/binary-data|Binary Data]] — Categorical data with only two categories (0/1, true/false).
+- [[concepts/binning|Binning]] — Splitting continuous features into discrete intervals for linear models.
+- [[concepts/binomial-distribution|Binomial Distribution]] — Distribution for sum of independent Bernoulli trials.
+- [[concepts/binomial-trial|Binomial Trial]] — Event with two discrete outcomes; Bernoulli trial.
+- [[concepts/biometric-scanner|Biometric Scanner]] — Validates identity by scanning physiological or behavioral traits.
+- [[concepts/biometrics|Biometrics]] — Identity determination based on unique human characteristics.
+- [[concepts/biplot|Biplot]] — Correspondence analysis scatterplot; proximity indicates association.
+- [[concepts/black-box-predictive-models|Black Box Predictive Models]] — Massive models misleadingly described with causal interpretations.
+- [[concepts/blinding|Blinding]] — Study design hiding treatment assignment from subjects/investigators.
+- [[concepts/blobs|BLOBs (Binary Large Objects)]] — Audio, video, graph files needing structuring before analysis.
+- [[concepts/block
