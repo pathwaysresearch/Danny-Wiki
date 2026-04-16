@@ -264,25 +264,36 @@ def tool_graph_traverse(slug: str, hops: int = 1, max_nodes: int = 8, graph: dic
 
     output = []
 
-    # Resolve slug — exact match first, then partial match as fallback
+    # Resolve slug — exact match first, then word-overlap fuzzy match as fallback
     resolved_slug = slug
     seed_data = graph["nodes"].get(slug, {})
     if not seed_data:
-        # Try: slug is a substring of a node key, or a node key is a substring of slug
         slug_lower = slug.lower()
-        candidates = [
-            k for k in graph["nodes"]
-            if slug_lower in k.lower() or k.lower() in slug_lower
-        ]
+        # Significant words: split on '-' or '_', keep words longer than 3 chars
+        sig_words = [w for w in re.split(r"[-_]", slug_lower) if len(w) > 3]
+
+        candidates = []
+        for k in graph["nodes"]:
+            k_lower = k.lower()
+            # Accept if: the slug is a long-enough direct substring of the key (or vice-versa),
+            # OR at least 2 significant words from the slug appear in the key.
+            if (len(slug_lower) > 5 and slug_lower in k_lower) or \
+               (len(k_lower) > 5 and k_lower in slug_lower):
+                candidates.append(k)
+            elif sig_words:
+                n_match = sum(1 for w in sig_words if w in k_lower)
+                if n_match >= min(2, len(sig_words)):
+                    candidates.append(k)
+
         if candidates:
-            # Prefer shorter (more specific) matches
+            # Prefer shortest key (most specific match)
             resolved_slug = min(candidates, key=len)
             seed_data = graph["nodes"][resolved_slug]
-            print(f"[GraphTraverse] Slug '{slug}' not found → fuzzy match '{resolved_slug}'")
+            print(f"[GraphTraverse] Slug '{slug}' not found → fuzzy match '{resolved_slug}' (from {len(candidates)} candidates)")
         else:
-            print(f"[GraphTraverse] Slug '{slug}' not found in graph and no fuzzy match — returning empty")
+            print(f"[GraphTraverse] Slug '{slug}' not found in graph — no fuzzy match")
             return [{"slug": slug, "title": slug, "type": "unknown", "edge": "seed",
-                     "content": f"[Page '{slug}' not found in wiki graph]"}]
+                     "content": f"[Page '{slug}' not found in wiki]"}]
 
     # Always include the seed node's own content first
     seed_rel_path = seed_data.get("path", "")
@@ -489,7 +500,6 @@ _WIKI_LLM_TOOLS = [
         },
     }
 ]
-
 # Navigation prompt: WIKI LLM's job during a query
 _WIKI_LLM_NAVIGATION_SYSTEM = """\
 You are the wiki navigation agent. Output JSON only. Never speak to the user.
@@ -498,11 +508,12 @@ You have the wiki catalog in <index_md> above, but **no page content yet**.
 You must call `graph_traverse` to fetch content before you can judge relevance.
 
 ---
+
 ## STEP 1 — Identify candidates from index.md and fetch content
 
 Scan index.md for entries whose title or description relates to the query.
-**Extract the slug EXACTLY as it appears in index.md** — do NOT invent or guess slugs.
 
+**Extract the slug EXACTLY as it appears in index.md** — do NOT invent or guess slugs.
 index.md uses wikilink syntax: `[[path/to/slug|Title]]`
 The slug = the part after the last `/` and before `|` or `.md`.
 Example: `[[concepts/microequity|Microequity]]` → slug is `microequity`
@@ -514,34 +525,77 @@ Each call returns that page + its neighbors with full content.
 output `{"sufficient": false, "selected_slugs": [], "note": "Topic not in wiki"}`.
 
 ---
-## STEP 2 — Judge the fetched content (strict)
 
-For every page returned ask:
-> *"Does this page contain a specific passage that directly answers the question — not just the same keywords?"*
+## STEP 2 — Judge the fetched content (STRICT — this is where you must not cheat)
 
-- **`sufficient: true`** — at least one page has a direct, specific answer.
-- **`sufficient: false`** — pages are topically nearby but the actual answer is absent.
+Your job is **not** to decide whether the fetched pages are "about the right topic."
+Your job is to decide whether they **contain the answer** to the user's specific question.
 
-**Default to `sufficient: false` when in doubt.** MAIN_LLM has a RAG fallback.
-Even when `sufficient: false`, include the closest slugs found so MAIN_LLM has partial wiki context.
+### The sufficiency test
+
+Before declaring `sufficient: true`, you must be able to do this:
+
+> Point to a specific passage (a sentence or paragraph) on one of the fetched pages
+> and say: "This passage directly answers the user's question because it states X."
+
+If you cannot identify that passage — if the best you can do is "this page discusses
+the general area" or "this page mentions the keyword" — then `sufficient: false`.
+
+### Not sufficient (common failure modes — watch for these)
+
+- **Keyword overlap only.** The page uses the same terms as the query but does not
+  answer what was asked. ("The query asks *why* X happens; the page defines X.")
+- **Topical adjacency.** The page is about a neighboring concept. ("Query asks about
+  Random Forests; the page covers Decision Trees and mentions ensembles in passing.")
+- **Tangential mention.** The topic appears in one sentence as an example, with no
+  substantive treatment.
+- **Wrong level of specificity.** Query asks for a concrete mechanism, number, or
+  example; page gives only high-level framing — or vice versa.
+- **Asserts without explaining.** Query asks *why* or *how*; page only states *that*.
+- **Partial answer.** Page addresses one part of a multi-part question; the rest is
+  absent.
+
+In all of these → `sufficient: false`, even though the pages are worth passing along.
+
+### When in doubt → false
+
+Default to `sufficient: false`. MAIN_LLM has a RAG fallback and can recover gracefully
+from a false negative. A false positive, on the other hand, makes MAIN_LLM answer from
+thin wiki context and skip the library — which is the failure you are trying to avoid.
+
+### Even when `sufficient: false`
+
+Include the closest slugs found in `selected_slugs` so MAIN_LLM has partial wiki
+context to work with alongside its RAG results.
 
 ---
+
 ## Output (JSON only — no other text)
 
 ```json
 {
   "sufficient": <true|false>,
   "selected_slugs": ["slug-one", "slug-two"],
-  "note": "<required when sufficient is false: one sentence on what is missing>"
+  "evidence": "<required when sufficient is true: the specific passage (≤2 sentences, quoted or closely paraphrased) from one of the fetched pages that directly answers the query, prefixed with the slug it came from — e.g. 'microequity: Microequity contracts are self-enforcing without costly state verification because...'>",
+  "note": "<required when sufficient is false: one sentence on what is missing — e.g. 'Pages cover decision trees generally but do not explain bagging or variance reduction.'>"
 }
 ```
 
+Rules:
+- If `sufficient: true`, `evidence` is mandatory and must quote or closely paraphrase
+  an actual passage from a fetched page. If you cannot fill this field honestly,
+  flip `sufficient` to false.
+- If `sufficient: false`, `note` is mandatory.
+- Include `selected_slugs` in both cases.
+
 ## SLUG FORMAT — CRITICAL
+
 - Only use slugs you found in index.md. **Never invent a slug.**
 - Bare filename only — no path prefix, no extension.
 - ✅ `"thinking-patterns"`, `"microequity"`, `"prof-bhagwan-chowdhry"`
-- ❌ `"persona/thinking-patterns"`, `"random-forest"` (unless that exact string appears in index.md)\
+- ❌ `"persona/thinking-patterns"`, `"random-forest"` (unless that exact string appears in index.md)
 """
+
 
 # Maintenance prompt: WIKI LLM's job when writing a new wiki page from synthesis
 _WIKI_LLM_MAINTENANCE_SYSTEM = """\
@@ -607,21 +661,27 @@ def run_wiki_llm(
     )
 
     # Execute all graph_traverse tool calls, then do one follow-up call
+    # Also collect every slug that came back so we can use them as a fallback.
+    traversed_slugs: list = []
     if response.stop_reason == "tool_use":
         tool_results = []
         for block in response.content:
             if block.type == "tool_use" and block.name == "graph_traverse":
                 print(f"[WikiLLM] graph_traverse({block.input.get('slug')})")
-                result = tool_graph_traverse(
+                pages = tool_graph_traverse(
                     slug=block.input.get("slug", ""),
                     hops=block.input.get("hops", 1),
                     max_nodes=block.input.get("max_nodes", 8),
                     graph=graph,
                 )
+                # Track slugs that have actual content
+                for p in pages:
+                    if p.get("content") and p["slug"] not in traversed_slugs:
+                        traversed_slugs.append(p["slug"])
                 tool_results.append({
                     "type": "tool_result",
                     "tool_use_id": block.id,
-                    "content": json.dumps(result, ensure_ascii=False),
+                    "content": json.dumps(pages, ensure_ascii=False),
                 })
 
         messages.append({"role": "assistant", "content": response.content})
@@ -641,11 +701,18 @@ def run_wiki_llm(
     )
 
     result = _extract_json(final_text)
+
+    # If LLM returned empty selected_slugs but we fetched pages with content,
+    # fall back to those slugs so MAIN_LLM isn't left without wiki context.
+    if result and result.get("selected_slugs") == [] and traversed_slugs:
+        print(f"[WikiLLM] selected_slugs was empty — using traversed slugs as fallback: {traversed_slugs}")
+        result["selected_slugs"] = traversed_slugs
+
     if not result or "selected_slugs" not in result:
         result = {
             "sufficient": False,
-            "selected_slugs": [],
-            "note": "Wiki LLM parse failed — routing to RAG",
+            "selected_slugs": traversed_slugs,
+            "note": "Wiki LLM parse failed — using traversed slugs",
         }
 
     return result
@@ -682,8 +749,6 @@ _MAIN_LLM_TOOLS = [
         },
     }
 ]
-
-
 _METADATA_SCHEMA = """\
 {
   "sources": {
@@ -692,8 +757,7 @@ _METADATA_SCHEMA = """\
   },
   "new_synthesis": "Novel insight, connection, or resolved contradiction worth preserving. Empty string if none.",
   "should_wiki_update": true
-}\
-"""
+}"""
 
 # Delimiter that separates the streamed answer from the trailing metadata JSON.
 # Chosen to be unambiguous and unlikely to appear in natural prose.
@@ -708,15 +772,37 @@ You are Danny — a Data Analysis professor with three decades of teaching exper
 - Use em-dashes for asides—and rhetorical questions to engage
 - Explain jargon naturally; favor active voice and confident phrasing
 - Tone: measured optimism with a touch of wit
-- Draw on specific names, numbers, and places from the knowledge base
-- ❌ "*laughs* That's a great question" → ✅ "That's genuinely fascinating"
+- Draw on specific names, numbers, and places from the knowledge base — never fabricate them
+- Prefer "That's genuinely fascinating" over "*laughs* That's a great question"
 
-## Source attribution
-End your answer with this block (before [METADATA]):
+## Knowledge-Source Policy (strict ladder — stop as soon as you have a solid answer)
 
-**My Memory:** [wiki page titles you drew on, or If not relevant 'Found Nothing in My Memory']
-**My Library:** [RAG source titles from rag_search results, IF the library(RAG) wasn't used, Then say "Didn't use the library" or  only if the library doesnt have anything relevant say "Found Nothing in My Library"]
-**General Knowledge:** [ONLY AFTER THE LIBRARY(RAG) IS SEARCHED AND NOTHING IS FOUND, you may use your general knowledge to answer, IF NOT used say "Didn't use general knowledge"]
+You have three sources, ranked by trust. Escalate to the next rung only when the current one leaves a real gap for the user's question.
+
+1. **Memory (wiki)** — the wiki context already provided in this prompt. Read it first.
+   - If it answers the question well, write the answer from memory alone.
+   - Do NOT call `rag_search`. Do NOT reach for general knowledge.
+
+2. **Library (RAG)** — call `rag_search` only when memory is insufficient (missing facts, shallow coverage, off-topic, or contradicted by the user's framing).
+   - Before calling, write one natural sentence telling the user you're checking — e.g. "Let me dig into my library for this." or "Give me a moment — I want to pull from the source on this."
+   - Incorporate the returned passages and continue the answer.
+   - If the library supplies what's needed, STOP. Do not fall back to general knowledge.
+
+3. **General knowledge** — use only if memory AND the library both fell short for some part of the question.
+   - Call out in the source-attribution block exactly which part you filled from general knowledge.
+   - Never use general knowledge to polish or expand a memory/library answer that already stood on its own.
+
+Escalation is a response to a gap, not a habit. A good memory-only answer should not grow a library call; a good library answer should not grow a general-knowledge coda.
+
+## Source attribution (end of every answer, before [METADATA])
+
+Emit exactly these three lines, in this order, every time:
+
+**My Memory:** <comma-separated wiki page titles you actually used> — or "Found nothing in my memory" if memory was inspected but unhelpful.
+
+**My Library:** <comma-separated RAG source titles from `rag_search` results> — or "Didn't use the library" if you didn't call it — or "Found nothing in my library" if you called it and nothing was relevant.
+
+**General Knowledge:** <one short phrase on what you filled in from general knowledge> — or "Didn't use general knowledge" if you didn't.
 
 ## RAG instruction
 {rag_instruction}
@@ -725,28 +811,31 @@ End your answer with this block (before [METADATA]):
 Math: use (...) for inline, [...] for display. Never $...$. Use LaTeX syntax.
 
 ## Output format — CRITICAL
-Write your full answer as plain conversational text (markdown is fine).
-After your complete answer, output EXACTLY this on its own line, then the metadata JSON:
+Write your full answer as plain conversational text (markdown is fine), ending with the three-line source-attribution block above.
+
+Then, on its own line, output exactly the marker followed by the metadata JSON:
 
 [METADATA]
 {metadata_schema}
 
-Rules:
-- sources.wiki: titles of wiki pages you actually used
-- sources.rag: source titles from rag_search results (empty list if not called)
-- should_wiki_update: true when you synthesise non-obvious connections, resolve a contradiction, or produce a novel framing
-- new_synthesis: one sentence capturing the insight, or "" if none\
+Rules for the metadata JSON:
+- `sources.wiki`: titles of wiki pages you actually drew on (empty list if none).
+- `sources.rag`: source titles returned by `rag_search` that you actually used (empty list if not called or not used).
+- `should_wiki_update`: true when you synthesised a non-obvious connection, resolved a contradiction, or produced a novel framing worth preserving; false otherwise.
+- `new_synthesis`: one sentence capturing that insight, or "" if none.
 """
 
 _RAG_INSTRUCTION_SUFFICIENT = (
-    "The wiki context is **complete** for this query. "
-    "Answer from wiki only — DO NOT call `rag_search`."
+    "The wiki context looks **complete** for this query. "
+    "Answer from memory only — do NOT call `rag_search`, and do NOT reach for general knowledge."
 )
+
 _RAG_INSTRUCTION_INSUFFICIENT = (
-    "The wiki context is **incomplete**. "
-    "Before calling `rag_search`, write one natural sentence telling the user you are checking your source library "
-    "(e.g. 'Let me dig into my library for this.' or 'Give me a moment — I want to pull from the source on this.'). "
-    "Then call `rag_search`, incorporate the results, and continue your answer."
+    "The wiki context looks **incomplete** for this query. "
+    "Follow the escalation ladder: announce the library check in one natural sentence, call `rag_search`, "
+    "incorporate the results, and continue the answer. Only if the library also falls short should you use "
+    "general knowledge — and when you do, name exactly which part of the answer it covers in the "
+    "source-attribution block."
 )
 
 
