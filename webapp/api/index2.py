@@ -740,7 +740,6 @@ After your complete answer, output EXACTLY this on its own line, then the metada
 {metadata_schema}
 
 Rules:
-- [METADATA] must be the very last thing you output — never mid-response
 - sources.wiki: titles of wiki pages you actually used
 - sources.rag: source titles from rag_search results (empty list if not called)
 - should_wiki_update: true when you synthesise non-obvious connections, resolve a contradiction, or produce a novel framing
@@ -807,9 +806,13 @@ def run_main_llm_streaming(
 
     # Sliding tail buffer: we hold back up to len(_METADATA_MARKER) chars so we
     # can detect the marker even if it straddles two chunks.
+    # Also match the bare "[METADATA]" variant (no surrounding newlines) the LLM
+    # sometimes emits, so we never miss the split point.
+    _BARE_MARKER = "[METADATA]"
     tail_buffer = ""
     metadata_mode = False
     metadata_buf = ""
+    full_response = ""   # accumulates everything; fallback if marker is absent
     final_msg = None
 
     for _ in range(2):  # at most one tool call (rag_search)
@@ -821,14 +824,23 @@ def run_main_llm_streaming(
             **tools_arg,
         ) as stream:
             for text_chunk in stream.text_stream:
+                full_response += text_chunk
+
                 if metadata_mode:
                     metadata_buf += text_chunk
                     continue
 
                 tail_buffer += text_chunk
 
-                if _METADATA_MARKER in tail_buffer:
-                    before, _, after = tail_buffer.partition(_METADATA_MARKER)
+                # Check for either marker variant
+                marker_hit = None
+                for marker in (_METADATA_MARKER, _BARE_MARKER):
+                    if marker in tail_buffer:
+                        marker_hit = marker
+                        break
+
+                if marker_hit:
+                    before, _, after = tail_buffer.partition(marker_hit)
                     if before:
                         yield ("text", before)
                     metadata_mode = True
@@ -875,10 +887,22 @@ def run_main_llm_streaming(
         messages.append({"role": "assistant", "content": final_msg.content})
         messages.append({"role": "user", "content": tool_results})
 
-    # Parse and yield metadata
-    try:
-        metadata = json.loads(metadata_buf.strip())
-    except (json.JSONDecodeError, ValueError):
+    # Parse metadata — try the captured metadata_buf first, then fall back to
+    # scanning the full response for any JSON object (handles missing marker).
+    metadata = None
+    for candidate in (metadata_buf.strip(), full_response):
+        if not candidate:
+            continue
+        try:
+            metadata = json.loads(candidate.strip())
+            break
+        except (json.JSONDecodeError, ValueError):
+            extracted = _extract_json(candidate)
+            if extracted and "sources" in extracted:
+                metadata = extracted
+                break
+
+    if metadata is None:
         print(f"[MainLLM] Metadata parse failed. Raw: {metadata_buf[:200]!r}")
         metadata = {"sources": {"wiki": [], "rag": []}, "new_synthesis": "", "should_wiki_update": False}
 
