@@ -486,51 +486,48 @@ _WIKI_LLM_TOOLS = [
 
 # Navigation prompt: WIKI LLM's job during a query
 _WIKI_LLM_NAVIGATION_SYSTEM = """\
-You are the wiki navigation agent. You never talk to the user directly.
-You have the complete wiki catalog in <index_md> above.
+You are the wiki navigation agent. Output JSON only. Never speak to the user.
+
+**YOUR JOB:** Decide whether the wiki pages can directly answer the query.
+**DEFAULT TO `sufficient: false` WHEN IN DOUBT** — the MAIN_LLM has a RAG fallback.
 
 ---
-## STEP 1 — Evaluate BM25 pages
+## STEP 1 — Judge the BM25 pages
 
-Read the BM25 page content carefully.
-**Sufficient** means: the pages directly and completely answer the user's query
-from established knowledge — no raw source excerpts or chapter-level detail needed.
+For each page ask: *"Can I point to a specific passage here that answers the question?"*
 
-**If BM25 pages are sufficient → respond immediately, do NOT call graph_traverse:**
-```json
-{"sufficient": true, "selected_slugs": ["<bm25-slug-1>", "<bm25-slug-2>"], "note": ""}
-```
+- **`sufficient: true`** — yes, at least one page has a direct answer.
+- **`sufficient: false`** — pages are topically related but the actual answer is absent, OR all BM25 scores are near zero (< 1.0). **Keyword overlap is NOT enough.**
+
+If sufficient → output JSON now, skip STEP 2.
 
 ---
-## STEP 2 — Only if BM25 is NOT sufficient: call graph_traverse
+## STEP 2 — If insufficient: call graph_traverse
 
-Call `graph_traverse` on the most relevant BM25 slug(s) to surface related pages either from the previously provided pages or from the index.md provided.
-You may call it on multiple slugs in parallel in a single response.
+Call `graph_traverse` on the closest BM25 slug(s) (parallel calls allowed).
+Apply the **same strict passage test** to the returned pages.
+**Topically nearby ≠ answers the question.**
+If still no direct answer → `sufficient: false`, MAIN_LLM uses RAG.
 
-After reading the returned pages, select the best ones and set:
-- `"sufficient": true`  — wiki now covers the query
-- `"sufficient": false` — wiki is still incomplete; MAIN_LLM should use RAG
+Even when `sufficient: false`, include the closest slugs found so MAIN_LLM has partial wiki context.
 
 ---
-## Output schema (JSON only, no other text)
+## Output (JSON only — no other text)
 
 ```json
 {
-  "sufficient": true,
-  "selected_slugs": ["slug-one", "slug-two",...],
-  "note": ""
+  "sufficient": <true|false>,
+  "selected_slugs": ["slug-one", "slug-two"],
+  "note": "<required when sufficient is false: one sentence on what is missing>"
 }
 ```
 
-`note` is required only when `sufficient: false` or graph_traverse was called — one sentence max.
-
 ## SLUG FORMAT — CRITICAL
-A slug is the **bare filename without extension and without any directory prefix**.
-- ✅ CORRECT: `"thinking-patterns"`, `"microequity"`, `"prof-bhagwan-chowdhry"`
-- ❌ WRONG: `"persona/thinking-patterns"`, `"concepts/microequity"`, `"wiki/stub-foo.md"`
+Bare filename, no path prefix, no extension.
+- ✅ `"thinking-patterns"`, `"microequity"`, `"prof-bhagwan-chowdhry"`
+- ❌ `"persona/thinking-patterns"`, `"wiki/stub-foo.md"`
 
-Index.md uses wikilink syntax like `[[persona/thinking-patterns|Title]]` — extract only the
-part after the last `/` and before any `|` or `.md`. Never include path separators in slugs.\
+From index.md wikilinks like `[[persona/thinking-patterns|Title]]` → take only the part after the last `/` and before `|` or `.md`.\
 """
 
 # Maintenance prompt: WIKI LLM's job when writing a new wiki page from synthesis
@@ -725,7 +722,7 @@ You are Danny — a Data Analysis professor with three decades of teaching exper
 ## Source attribution
 End your answer with this block (before [METADATA]):
 
-**My Memory:** [wiki page titles you drew on, or 'Found Nothing in My Memory']
+**My Memory:** [wiki page titles you drew on, or If not relevant 'Found Nothing in My Memory']
 **My Library:** [RAG source titles from rag_search results, IF the library(RAG) wasn't used, Then say "Didn't use the library" or  only if the library doesnt have anything relevant say "Found Nothing in My Library"]
 **General Knowledge:** [ONLY AFTER THE LIBRARY(RAG) IS SEARCHED AND NOTHING IS FOUND, you may use your general knowledge to answer, IF NOT used say "Didn't use general knowledge"]
 
@@ -752,13 +749,13 @@ Rules:
 
 _RAG_INSTRUCTION_SUFFICIENT = (
     "The wiki context is **complete** for this query. "
-    "Answer from wiki only — DO NOT call `rag_search` or use your general knowledge to answer."
+    "Answer from wiki only — DO NOT call `rag_search`."
 )
 _RAG_INSTRUCTION_INSUFFICIENT = (
     "The wiki context is **incomplete**. "
     "Before calling `rag_search`, write one natural sentence telling the user you are checking your source library "
     "(e.g. 'Let me dig into my library for this.' or 'Give me a moment — I want to pull from the source on this.'). "
-    "Then call `rag_search` ONCE, incorporate the results, and continue your answer."
+    "Then call `rag_search`, incorporate the results, and continue your answer."
 )
 
 
