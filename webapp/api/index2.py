@@ -295,21 +295,24 @@ def tool_graph_traverse(slug: str, hops: int = 1, max_nodes: int = 8, graph: dic
             return [{"slug": slug, "title": slug, "type": "unknown", "edge": "seed",
                      "content": f"[Page '{slug}' not found in wiki]"}]
 
-    # Always include the seed node's own content first
-    seed_rel_path = seed_data.get("path", "")
-    seed_content = ""
-    if seed_rel_path:
-        seed_full_path = VAULT / seed_rel_path
-        if seed_full_path.exists():
-            try:
-                seed_content = seed_full_path.read_text(encoding="utf-8")
-            except Exception:
-                seed_content = ""
-        else:
-            print(f"[GraphTraverse] File not found on disk: {seed_full_path}")
-    else:
-        print(f"[GraphTraverse] Node '{resolved_slug}' has no path in graph")
+    def _read_node(node_data: dict, label: str) -> str:
+        """Read a wiki page from disk, normalising path separators for cross-platform use."""
+        rel_path = node_data.get("path", "").replace("\\", "/")
+        if not rel_path:
+            print(f"[GraphTraverse] Node '{label}' has no path in graph")
+            return ""
+        full_path = VAULT / rel_path
+        if not full_path.exists():
+            print(f"[GraphTraverse] File not found on disk: {full_path}")
+            return ""
+        try:
+            return full_path.read_text(encoding="utf-8")
+        except Exception as e:
+            print(f"[GraphTraverse] Read error for {full_path}: {e}")
+            return ""
 
+    # Always include the seed node's own content first
+    seed_content = _read_node(seed_data, resolved_slug)
     print(f"[GraphTraverse] Seed '{resolved_slug}' — content {'found' if seed_content else 'EMPTY'}")
     output.append({
         "slug": resolved_slug,
@@ -328,15 +331,7 @@ def tool_graph_traverse(slug: str, hops: int = 1, max_nodes: int = 8, graph: dic
             continue
         seen.add(node)
         node_data = graph["nodes"].get(node, {})
-        rel_path = node_data.get("path", "")
-        content = ""
-        if rel_path:
-            full_path = VAULT / rel_path
-            if full_path.exists():
-                try:
-                    content = full_path.read_text(encoding="utf-8")
-                except Exception:
-                    content = ""
+        content = _read_node(node_data, node)
 
         edge_str = " → ".join(
             f"{p['from']} --[{p['type']}]--> {p['to']}"
@@ -674,9 +669,10 @@ def run_wiki_llm(
                     max_nodes=block.input.get("max_nodes", 8),
                     graph=graph,
                 )
-                # Track slugs that have actual content
+                        # Track all returned slugs — even content-empty ones are valid
+                # wiki pages that _pipeline_setup can look up from kb.wiki_pages.
                 for p in pages:
-                    if p.get("content") and p["slug"] not in traversed_slugs:
+                    if p["slug"] not in traversed_slugs:
                         traversed_slugs.append(p["slug"])
                 tool_results.append({
                     "type": "tool_result",
@@ -794,9 +790,21 @@ You have three sources, ranked by trust. Escalate to the next rung only when the
 
 Escalation is a response to a gap, not a habit. A good memory-only answer should not grow a library call; a good library answer should not grow a general-knowledge coda.
 
-## Source attribution (end of every answer, before [METADATA])
+## RAG instruction
+{rag_instruction}
 
-Emit exactly these three lines, in this order, every time:
+## Formatting
+Math: use (...) for inline, [...] for display. Never $...$. Use LaTeX syntax.
+
+## Output format — EVERY RESPONSE MUST END WITH A METADATA BLOCK
+
+Your response has THREE parts, in this exact order. All three are mandatory. A response that omits any part is malformed and will be rejected by the pipeline.
+
+### Part 1 — Your answer
+Plain conversational text (markdown is fine). This is the substantive reply to the user.
+
+### Part 2 — Source-attribution block
+Exactly these three lines, in this order:
 
 **My Memory:** <comma-separated wiki page titles you actually used> — or "Found nothing in my memory" if memory was inspected but unhelpful.
 
@@ -804,25 +812,31 @@ Emit exactly these three lines, in this order, every time:
 
 **General Knowledge:** <one short phrase on what you filled in from general knowledge> — or "Didn't use general knowledge" if you didn't.
 
-## RAG instruction
-{rag_instruction}
+### Part 3 — Metadata block (DO NOT SKIP)
+A blank line, then the literal marker `[METADATA]` on its own line, then a JSON object filling in this schema:
 
-## Formatting
-Math: use (...) for inline, [...] for display. Never $...$. Use LaTeX syntax.
-
-## Output format — CRITICAL
-Write your full answer as plain conversational text (markdown is fine), ending with the three-line source-attribution block above.
-
-Then, on its own line, output exactly the marker followed by the metadata JSON:
-
-[METADATA]
 {metadata_schema}
 
-Rules for the metadata JSON:
-- `sources.wiki`: titles of wiki pages you actually drew on (empty list if none).
-- `sources.rag`: source titles returned by `rag_search` that you actually used (empty list if not called or not used).
-- `should_wiki_update`: true when you synthesised a non-obvious connection, resolved a contradiction, or produced a novel framing worth preserving; false otherwise.
-- `new_synthesis`: one sentence capturing that insight, or "" if none.
+The schema above is a **template showing structure** — not the metadata itself. You must emit your own filled-in JSON object after the `[METADATA]` line every time.
+
+Field rules:
+- `sources.wiki`: titles of wiki pages you actually drew on (empty list `[]` if none).
+- `sources.rag`: source titles returned by `rag_search` that you actually used (empty list `[]` if not called or not used).
+- `should_wiki_update`: `true` when you synthesised a non-obvious connection, resolved a contradiction, or produced a novel framing worth preserving; `false` otherwise.
+- `new_synthesis`: one sentence capturing that insight, or `""` if none.
+
+### Worked example of a complete, correctly-shaped response
+
+(Answer text here — one or more paragraphs of conversational prose responding to the user's question.)
+
+**My Memory:** Microequity, Costly State Verification
+**My Library:** Didn't use the library
+**General Knowledge:** Didn't use general knowledge
+
+[METADATA]
+{{"sources": {{"wiki": ["Microequity", "Costly State Verification"], "rag": []}}, "new_synthesis": "", "should_wiki_update": false}}
+
+Every one of your responses must end in this exact shape: answer → three attribution lines → `[METADATA]` → filled JSON. If you find yourself about to stop after the attribution lines, you are not done — emit the metadata block and then stop.
 """
 
 _RAG_INSTRUCTION_SUFFICIENT = (
@@ -883,7 +897,9 @@ def run_main_llm_streaming(
     """
     system = _build_main_llm_system(sufficient)
     messages = _build_wiki_messages(wiki_context, wiki_note, user_query)
-    tools_arg = {} if sufficient else {"tools": _MAIN_LLM_TOOLS}
+    _tools_available = {} if sufficient else {"tools": _MAIN_LLM_TOOLS}
+    _MAX_RAG_CALLS = 2
+    _rag_calls_made = 0
 
     _BARE_MARKER = "[METADATA]"
     tail_buffer = ""
@@ -893,13 +909,15 @@ def run_main_llm_streaming(
     final_msg = None
     rag_sources_used: list = []   # track sources from every rag_search call
 
-    for _ in range(2):  # at most one tool call (rag_search)
+    for _ in range(_MAX_RAG_CALLS + 1):  # up to MAX_RAG_CALLS tool calls + 1 final answer
+        # Once rag budget is used up, strip tools so LLM MUST write the final answer
+        current_tools = _tools_available if _rag_calls_made < _MAX_RAG_CALLS else {}
         with client.messages.stream(
             model=MAIN_LLM_MODEL,
             max_tokens=4096,
             system=system,
             messages=messages,
-            **tools_arg,
+            **current_tools,
         ) as stream:
             for text_chunk in stream.text_stream:
                 full_response += text_chunk
@@ -948,6 +966,7 @@ def run_main_llm_streaming(
                     faiss_index=faiss_index,
                     top_k=block.input.get("top_k", 7),
                 )
+                _rag_calls_made += 1
                 # Track unique source titles for synthetic metadata fallback
                 for r in rag_results:
                     src = r.get("source", "")
