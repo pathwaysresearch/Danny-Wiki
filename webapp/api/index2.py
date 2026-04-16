@@ -2,8 +2,7 @@
 webapp/api/index2.py — Dual-LLM agentic query pipeline (Flask deployment)
 
 Architecture (see CLAUDE.md):
-  BM25 (wiki only, full content: title + aliases + tags + body) → top 2 pages
-  → WIKI_LLM / Sonnet (wiki agent): navigation, optional graph_traverse tool call
+  WIKI_LLM / Sonnet (wiki agent): reads index.md, calls graph_traverse to fetch pages
   → MAIN_LLM / Opus (answer agent): synthesis, optional rag_search tool call
   → structured JSON response → answer string to frontend + async wiki update
 
@@ -71,15 +70,6 @@ try:
     load_dotenv(PROJECT_ROOT / ".env")
 except ImportError:
     pass
-
-# Optional: BM25
-try:
-    from rank_bm25 import BM25Okapi
-    _HAS_BM25 = True
-except ImportError:
-    BM25Okapi = None
-    _HAS_BM25 = False
-    print("[Warning] rank-bm25 not installed. BM25 disabled — install with: pip install rank-bm25")
 
 # ---------------------------------------------------------------------------
 # Paths and constants
@@ -209,38 +199,7 @@ def _load_faiss_index():
 
 
 # ---------------------------------------------------------------------------
-# BM25 index — wiki pages only, full content (title + aliases + tags + body)
-# ---------------------------------------------------------------------------
-
-
-def _build_wiki_bm25(pages: list):
-    """Build BM25Okapi over wiki pages using full content: title + aliases + tags + body text."""
-    if not _HAS_BM25 or not pages:
-        return None
-    tokenized = []
-    for p in pages:
-        body = strip_frontmatter(p.get("content", ""))
-        full_text = " ".join([
-            p.get("title", ""),
-            " ".join(p.get("aliases", [])),
-            " ".join(p.get("tags", [])),
-            body,
-        ])
-        tokenized.append(full_text.lower().split())
-    return BM25Okapi(tokenized)
-
-
-def bm25_wiki_search(query: str, pages: list, bm25, top_k: int = 2) -> list:
-    """Return top_k wiki pages scored by BM25 over full content (title + aliases + tags + body)."""
-    if bm25 is None or not pages:
-        return [{"page": p, "score": 0.0} for p in pages[:top_k]]
-    scores = bm25.get_scores(query.lower().split())
-    top_idx = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_k]
-    return [{"page": pages[i], "score": float(scores[i])} for i in top_idx]
-
-
-# ---------------------------------------------------------------------------
-# RAG search — embedding similarity only, no BM25 on chunks
+# RAG search — embedding similarity only
 # ---------------------------------------------------------------------------
 
 
@@ -295,18 +254,42 @@ def do_rag_search(
 
 def tool_graph_traverse(slug: str, hops: int = 1, max_nodes: int = 8, graph: dict = None) -> list:
     """
-    BFS from slug, return neighbor pages with full markdown content.
-    WIKI LLM reads this content to decide which slugs to select — it does NOT
-    copy this content into its output JSON.
+    Return the seed page itself + BFS neighbor pages, each with full markdown content.
+    WIKI LLM calls this to fetch a page it identified from index.md, then reads the
+    content to decide relevance. It does NOT copy content into its output JSON.
     """
     if graph is None:
         graph = _load_graph()
 
-    results = traverse(graph, slug, hops=hops)[:max_nodes]
     output = []
 
+    # Always include the seed node's own content first
+    seed_data = graph["nodes"].get(slug, {})
+    seed_rel_path = seed_data.get("path", "")
+    seed_content = ""
+    if seed_rel_path:
+        seed_full_path = VAULT / seed_rel_path
+        if seed_full_path.exists():
+            try:
+                seed_content = seed_full_path.read_text(encoding="utf-8")
+            except Exception:
+                seed_content = ""
+    output.append({
+        "slug": slug,
+        "title": seed_data.get("title", slug),
+        "type": seed_data.get("type", "unknown"),
+        "edge": "seed",
+        "content": seed_content,
+    })
+
+    # BFS neighbors
+    results = traverse(graph, slug, hops=hops)[:max_nodes]
+    seen = {slug}
     for r in results:
         node = r["node"]
+        if node in seen:
+            continue
+        seen.add(node)
         node_data = graph["nodes"].get(node, {})
         rel_path = node_data.get("path", "")
         content = ""
@@ -387,14 +370,13 @@ class KnowledgeBase:
     """
     Holds all in-memory state for the dual-LLM pipeline.
 
-    Thread safety: all mutation of shared state (wiki_pages, bm25, graph,
+    Thread safety: all mutation of shared state (wiki_pages, graph,
     index_md) must hold _lock. query() takes a snapshot under the lock so
     a concurrent wiki update cannot corrupt an in-flight query.
     """
 
     def __init__(self):
         self.wiki_pages: list = []
-        self.bm25 = None
         self.chunks: list = []
         self.faiss_index = None
         self.graph: dict = {}
@@ -406,7 +388,6 @@ class KnowledgeBase:
         """Full reload from disk. Holds lock while swapping state."""
         print("[KB] Loading knowledge base...")
         new_pages = _load_wiki_pages()
-        new_bm25 = _build_wiki_bm25(new_pages) if _HAS_BM25 else None
         new_chunks = _load_chunks()
         new_faiss = _load_faiss_index()
         new_graph = _load_graph()
@@ -414,10 +395,8 @@ class KnowledgeBase:
             INDEX_MD_PATH.read_text(encoding="utf-8")
             if INDEX_MD_PATH.exists() else ""
         )
-        # Single lock acquisition for the full state swap
         with self._lock:
             self.wiki_pages = new_pages
-            self.bm25 = new_bm25
             self.chunks = new_chunks
             self.faiss_index = new_faiss
             self.graph = new_graph
@@ -458,10 +437,9 @@ _WIKI_LLM_TOOLS = [
     {
         "name": "graph_traverse",
         "description": (
-            "BFS traversal from a wiki page slug to find related pages. "
-            "Use when the BM25 results are insufficient and index.md reveals "
-            "a more relevant page that BM25 missed. "
-            "Returns neighbor pages with their full markdown content for you to read."
+            "Fetch a wiki page and its neighbors. "
+            "Call this on slugs you identify from index.md to read their full content. "
+            "Returns the seed page itself plus related neighbor pages with full markdown content."
         ),
         "input_schema": {
             "type": "object",
@@ -488,28 +466,27 @@ _WIKI_LLM_TOOLS = [
 _WIKI_LLM_NAVIGATION_SYSTEM = """\
 You are the wiki navigation agent. Output JSON only. Never speak to the user.
 
-**YOUR JOB:** Decide whether the wiki pages can directly answer the query.
-**DEFAULT TO `sufficient: false` WHEN IN DOUBT** — the MAIN_LLM has a RAG fallback.
+You have the wiki catalog in <index_md> above, but **no page content yet**.
+You must call `graph_traverse` to fetch content before you can judge relevance.
 
 ---
-## STEP 1 — Judge the BM25 pages
+## STEP 1 — Identify candidates & fetch content
 
-For each page ask: *"Can I point to a specific passage here that answers the question?"*
-
-- **`sufficient: true`** — yes, at least one page has a direct answer.
-- **`sufficient: false`** — pages are topically related but the actual answer is absent, OR all BM25 scores are near zero (< 1.0). **Keyword overlap is NOT enough.**
-
-If sufficient → output JSON now, skip STEP 2.
+Read index.md and identify the slugs most likely to answer the query.
+Call `graph_traverse` on those slugs (parallel calls allowed — call as many as needed).
+Each call returns the page itself + its neighbors, all with full content.
 
 ---
-## STEP 2 — If insufficient: call graph_traverse
+## STEP 2 — Judge the fetched content (strict)
 
-Call `graph_traverse` on the closest BM25 slug(s) (parallel calls allowed).
-Apply the **same strict passage test** to the returned pages.
-**Topically nearby ≠ answers the question.**
-If still no direct answer → `sufficient: false`, MAIN_LLM uses RAG.
+For every page returned ask:
+> *"Can I point to a specific passage here that directly answers the question — not just the same keywords?"*
 
-Even when `sufficient: false`, include the closest slugs found so MAIN_LLM has partial wiki context.
+- **`sufficient: true`** — at least one page has a direct, specific answer.
+- **`sufficient: false`** — pages are only topically related; the actual answer is absent. **Keyword overlap is NOT enough.**
+
+**Default to `sufficient: false` when in doubt.** MAIN_LLM has a RAG fallback.
+Even when `sufficient: false`, include the closest slugs so MAIN_LLM has partial wiki context.
 
 ---
 ## Output (JSON only — no other text)
@@ -561,7 +538,6 @@ If an existing page should be updated instead, set "action": "update" and use it
 
 def run_wiki_llm(
     user_query: str,
-    bm25_pages: list,
     index_md: str,
     graph: dict,
     client: Anthropic,
@@ -574,45 +550,25 @@ def run_wiki_llm(
         "note": str
     }
 
-    WIKI_LLM reads full page content to make its decision but outputs only slugs.
-    The backend fetches full content for those slugs to pass to MAIN_LLM.
-    One API call — WIKI_LLM may issue multiple parallel graph_traverse calls in that
-    single response. All results are returned in one follow-up, then WIKI_LLM produces
-    its final JSON. Max 2 API calls total.
+    WIKI_LLM reads index.md to identify candidate slugs, calls graph_traverse to
+    fetch their content, then judges relevance. No BM25 pre-filter.
+    Up to 2 API calls total (first call fetches pages via tool; second produces JSON).
     """
-    # Show WIKI_LLM the full BM25 page content so it can make a good decision
-    bm25_block = ""
-    for i, r in enumerate(bm25_pages, 1):
-        p = r["page"]
-        bm25_block += (
-            f"\n--- BM25 Result {i} (score: {r['score']:.3f}) ---\n"
-            f"Slug: {p['slug']} | Title: {p['title']} | Type: {p['type']}\n\n"
-            f"{p['content']}\n"
-        )
-
     # Full index.md — never truncated (200K context window)
     system = f"<index_md>\n{index_md}\n</index_md>\n\n{_WIKI_LLM_NAVIGATION_SYSTEM}"
 
-    messages = [
-        {
-            "role": "user",
-            "content": (
-                f"User query: {user_query}\n\n"
-                f"BM25 search results:{bm25_block}"
-            ),
-        }
-    ]
+    messages = [{"role": "user", "content": f"User query: {user_query}"}]
 
-    # Single API call — WIKI_LLM may return multiple parallel graph_traverse tool_use blocks
+    # First call — LLM should call graph_traverse to fetch page content
     response = client.messages.create(
         model=WIKI_LLM_MODEL,
-        max_tokens=1024,   # output is just a small JSON slug list
+        max_tokens=1024,
         system=system,
         messages=messages,
         tools=_WIKI_LLM_TOOLS,
     )
 
-    # If WIKI LLM used tools, execute all of them and do one follow-up call
+    # Execute all graph_traverse tool calls, then do one follow-up call
     if response.stop_reason == "tool_use":
         tool_results = []
         for block in response.content:
@@ -620,7 +576,7 @@ def run_wiki_llm(
                 print(f"[WikiLLM] graph_traverse({block.input.get('slug')})")
                 result = tool_graph_traverse(
                     slug=block.input.get("slug", ""),
-                    hops=block.input.get("hops", 3),
+                    hops=block.input.get("hops", 1),
                     max_nodes=block.input.get("max_nodes", 8),
                     graph=graph,
                 )
@@ -633,7 +589,6 @@ def run_wiki_llm(
         messages.append({"role": "assistant", "content": response.content})
         messages.append({"role": "user", "content": tool_results})
 
-        # One follow-up call with all tool results
         response = client.messages.create(
             model=WIKI_LLM_MODEL,
             max_tokens=1024,
@@ -649,11 +604,10 @@ def run_wiki_llm(
 
     result = _extract_json(final_text)
     if not result or "selected_slugs" not in result:
-        # Fallback: use BM25 page slugs directly
         result = {
-            "sufficient": True,
-            "selected_slugs": [r["page"]["slug"] for r in bm25_pages],
-            "note": "WIKI LLM parse failed — using BM25 slugs directly",
+            "sufficient": False,
+            "selected_slugs": [],
+            "note": "Wiki LLM parse failed — routing to RAG",
         }
 
     return result
@@ -1010,7 +964,7 @@ def _do_wiki_update(
 
 def _write_wiki_page(page_data: dict, kb: KnowledgeBase, original_query: str = ""):
     """
-    Write a wiki page to disk, patch _graph.json, rebuild BM25 (under lock),
+    Write a wiki page to disk, patch _graph.json, update in-memory KB (under lock),
     append to index.md and log.md, then push both files to GitHub.
     """
     slug      = page_data.get("slug", "synthesized-page")
@@ -1078,7 +1032,7 @@ def _write_wiki_page(page_data: dict, kb: KnowledgeBase, original_query: str = "
         except OSError:
             pass
 
-    # Update in-memory KB under lock — BM25 rebuild included.
+    # Update in-memory KB under lock.
     # This works on both local and Vercel (memory is always writable).
     new_page_entry = {
         "slug": slug, "title": title, "aliases": aliases,
@@ -1091,7 +1045,6 @@ def _write_wiki_page(page_data: dict, kb: KnowledgeBase, original_query: str = "
         else:
             kb.wiki_pages.append(new_page_entry)
         kb.graph = graph
-        kb.bm25 = _build_wiki_bm25(kb.wiki_pages) if _HAS_BM25 else None
 
     # Append to index.md and refresh KB cache
     new_index_content = None
@@ -1142,7 +1095,7 @@ def _write_wiki_page(page_data: dict, kb: KnowledgeBase, original_query: str = "
 def _pipeline_setup(user_query: str, kb: KnowledgeBase, client: Anthropic):
     """
     Shared setup for both query() and query_streaming():
-    snapshot KB state, run BM25 + WIKI_LLM, return selected_pages + metadata.
+    snapshot KB state, run WIKI_LLM (index.md + graph_traverse), return selected_pages + metadata.
     Returns (selected_pages, wiki_result, chunks, faiss_index).
     """
     print(f"\n{'─'*60}")
@@ -1151,7 +1104,6 @@ def _pipeline_setup(user_query: str, kb: KnowledgeBase, client: Anthropic):
 
     with kb._lock:
         wiki_pages  = list(kb.wiki_pages)
-        bm25        = kb.bm25
         chunks      = list(kb.chunks)
         faiss_index = kb.faiss_index
         graph       = kb.graph
@@ -1159,12 +1111,8 @@ def _pipeline_setup(user_query: str, kb: KnowledgeBase, client: Anthropic):
 
     page_by_slug = {p["slug"]: p for p in wiki_pages}
 
-    bm25_results = bm25_wiki_search(user_query, wiki_pages, bm25, top_k=5)
-    print(f"[BM25]   top pages: {[r['page']['title'] for r in bm25_results]}")
-
     wiki_result = run_wiki_llm(
         user_query=user_query,
-        bm25_pages=bm25_results,
         index_md=index_md,
         graph=graph,
         client=client,
@@ -1189,8 +1137,8 @@ def _pipeline_setup(user_query: str, kb: KnowledgeBase, client: Anthropic):
             print(f"[Pipeline] Warning: slug '{raw_slug}' (normalised: '{slug}') not found — skipping")
 
     if not selected_pages:
-        print("[Pipeline] No slugs resolved — falling back to BM25 pages")
-        selected_pages = [r["page"] for r in bm25_results]
+        print("[Pipeline] No slugs resolved — no wiki context for MAIN_LLM")
+
 
     return selected_pages, wiki_result, chunks, faiss_index
 
@@ -1355,7 +1303,6 @@ def health():
         "wiki_pages": n_pages,
         "rag_chunks": n_chunks,
         "graph_nodes": n_nodes,
-        "bm25": _HAS_BM25,
     })
 
 
