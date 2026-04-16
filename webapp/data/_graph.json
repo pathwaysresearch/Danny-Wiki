@@ -32606,6 +32606,34 @@
       ],
       "path": "wiki\\stubs\\stub-can-an-ai-chatbot-pass-a-data-science-interview-eika-9k23v4.md"
     },
+    "stub-cloud-computing-concepts-technology-security-and-thomas-erl-eric-barcelo-2-2023-": {
+      "type": "stub",
+      "title": "Cloud Computing Concepts, Technology, Security, and Architecture (2nd Edition)",
+      "aliases": [
+        "Cloud Computing Concepts",
+        "Technology",
+        "Security",
+        "And Thomas Erl",
+        "Eric Barcelo 2",
+        "2023 Pears Content",
+        "Cloud Computing Concepts Technology Security and Architecture 2nd Edition"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-cloud-computing-concepts-technology-security-and-thomas-erl-eric-barcelo-2-2023-.md"
+    },
+    "stub-data-analytics-made-accessible-content": {
+      "type": "stub",
+      "title": "Data Analytics Made Accessible Content",
+      "aliases": [
+        "Data Analytics Made Accessible Content"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-data-analytics-made-accessible-content.md"
+    },
     "stub-data-science-for-business-book-review-discussion-with-author-foster-provost-and-": {
       "type": "stub",
       "title": "Data Science For Business Book Review Discussion With Author Foster Provost And Cqbrdy4Qz1K",
@@ -32618,6 +32646,29 @@
       ],
       "path": "wiki\\stubs\\stub-data-science-for-business-book-review-discussion-with-author-foster-provost-and-.md"
     },
+    "stub-data-science-from-scratch-first-principles-with-python-joel-grus-software-engine": {
+      "type": "stub",
+      "title": "Data Science From Scratch: First Principles With Python — Joel Grus",
+      "aliases": [
+        "Data Science From Scratch First Principles With Python Joel Grus",
+        "(Software Engineer) O Reil Content"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-data-science-from-scratch-first-principles-with-python-joel-grus-software-engine.md"
+    },
+    "stub-introduction-to-machine-learning-with-python-a-guide-for-andreas-c-muller-and-sa": {
+      "type": "stub",
+      "title": "Introduction To Machine Learning With Python A Guide For Andreas C MüLler And Sarah Guido 1 Content",
+      "aliases": [
+        "Introduction To Machine Learning With Python A Guide For Andreas C MüLler And Sarah Guido 1 Content"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-introduction-to-machine-learning-with-python-a-guide-for-andreas-c-muller-and-sa.md"
+    },
     "stub-is-ai-a-threat-to-the-creative-professions-ai-and-the-music-industry-8pjr7a6fxqe": {
       "type": "stub",
       "title": "Is AI a Threat to the Creative Professions? AI and the Music Industry",
@@ -32629,6 +32680,52 @@
       ],
       "path": "wiki\\stubs\\stub-is-ai-a-threat-to-the-creative-professions-ai-and-the-music-industry-8pjr7a6fxqe.md"
     },
+    "stub-linear-algebra-content": {
+      "type": "stub",
+      "title": "Linear Algebra Content",
+      "aliases": [
+        "Linear Algebra Content",
+        "Linear Algebra Done Right",
+        "Axler Linear Algebra"
+      ],
+      "tags": [
+        "rag-stub",
+        "mathematics",
+        "linear-algebra",
+        "textbook"
+      ],
+      "path": "wiki\\stubs\\stub-linear-algebra-content.md"
+    },
+    "stub-practical-statistics-for-data-scientists-50-essential-bruce-peter-bruce-andrew-g": {
+      "type": "stub",
+      "title": "Practical Statistics for Data Scientists: 50+ Essential Concepts Using R and Python",
+      "aliases": [
+        "Practical Statistics For Data Scientists 50+ Essential Bruce",
+        "Peter",
+        "Bruce",
+        "Andrew",
+        "Gedeck",
+        "Pet Content"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-practical-statistics-for-data-scientists-50-essential-bruce-peter-bruce-andrew-g.md"
+    },
+    "stub-python-for-data-analysis-data-wrangling-with-pandas-numpy-wes-mckinney-2nd-2017-": {
+      "type": "stub",
+      "title": "Python For Data Analysis Data Wrangling With Pandas, Numpy, Wes Mckinney 2Nd, 2017 O Reill Content",
+      "aliases": [
+        "Python For Data Analysis Data Wrangling With Pandas",
+        "Numpy",
+        "Wes Mckinney 2Nd",
+        "2017 O Reill Content"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-python-for-data-analysis-data-wrangling-with-pandas-numpy-wes-mckinney-2nd-2017-.md"
+    },
     "stub-vasant-dhar-on-thinking-with-machines-with-foster-provost-aa-0s60eapk": {
       "type": "stub",
       "title": "Vasant Dhar On Thinking With Machines With Foster Provost",
@@ -32639,6 +32736,48 @@
         "rag-stub"
       ],
       "path": "wiki\\stubs\\stub-vasant-dhar-on-thinking-with-machines-with-foster-provost-aa-0s60eapk.md"
+    },
+    "stub-ve-open-apis-financial-services-ebook-content": {
+      "type": "stub",
+      "title": "Open APIs in Financial Services Ebook Content",
+      "aliases": [
+        "Ve Open Apis Financial Services Ebook Content",
+        "Open APIs in Financial Services For Dummies"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-ve-open-apis-financial-services-ebook-content.md"
+    },
+    "stub-ǂthe-ǂhundred-page-machine-learning-book-andriy-burkov-lugar-de-publicacion-no-i": {
+      "type": "stub",
+      "title": "The Hundred-Page Machine Learning Book — Andriy Burkov",
+      "aliases": [
+        "ǂThe ǂHundred Page Machine Learning Book Andriy Burkov Lugar De PublicacióN No Identificado",
+        "2 Content",
+        "The Hundred-Page Machine Learning Book",
+        "Hundred Page ML Book"
+      ],
+      "tags": [
+        "rag-stub"
+      ],
+      "path": "wiki\\stubs\\stub-ǂthe-ǂhundred-page-machine-learning-book-andriy-burkov-lugar-de-publicacion-no-i.md"
+    },
+    "eigenvectors-visual-and-spectral-bridge": {
+      "type": "synthesized",
+      "title": "Eigenvectors: Visual Intuition and the Spectral Bridge",
+      "aliases": [
+        "eigenvector-intuition",
+        "eigenvectors-visual"
+      ],
+      "tags": [
+        "linear-algebra",
+        "eigenvectors",
+        "spectral-theory",
+        "orthonormal",
+        "visualization"
+      ],
+      "path": "wiki\\synthesized\\eigenvectors-visual-and-spectral-bridge.md"
     }
   },
   "edges": [
@@ -53256,6 +53395,21 @@
       "from": "thinking-patterns",
       "to": "foster-provost",
       "type": "part_of"
+    },
+    {
+      "from": "eigenvectors-visual-and-spectral-bridge",
+      "to": "orthonormal-list",
+      "type": "extends"
+    },
+    {
+      "from": "eigenvectors-visual-and-spectral-bridge",
+      "to": "adjoint-of-a-linear-map",
+      "type": "related"
+    },
+    {
+      "from": "eigenvectors-visual-and-spectral-bridge",
+      "to": "basis",
+      "type": "related"
     }
   ]
 }

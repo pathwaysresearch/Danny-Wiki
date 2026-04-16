@@ -40,7 +40,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from chunker import get_embeddings_batch
 
 PROJECT_ROOT = Path(__file__).parent.parent
-_vault_name = os.environ.get("WIKI_VAULT_NAME", "Vault")
+_vault_name = os.environ.get("WIKI_VAULT_NAME", "webapp/Vault")
 VAULT = PROJECT_ROOT / _vault_name
 WIKI_DIR = VAULT / "wiki"
 CHUNKS_FILE = PROJECT_ROOT / "data" / "chunks.json"
@@ -60,38 +60,6 @@ def content_hash(text: str) -> str:
 # Loaders (source data)
 # ---------------------------------------------------------------------------
 
-def load_wiki_pages():
-    """Read all .md files from wiki/ directory."""
-    pages = []
-    if not WIKI_DIR.exists():
-        return pages
-
-    for md_file in sorted(WIKI_DIR.rglob("*.md")):
-        rel_path = md_file.relative_to(VAULT)
-        content = md_file.read_text(encoding="utf-8").strip()
-
-        # Skip near-empty scaffold files
-        if len(content) < 50:
-            continue
-
-        # Extract title from first heading or filename
-        title = md_file.stem.replace("-", " ").replace("_", " ").title()
-        for line in content.splitlines():
-            if line.startswith("# "):
-                title = line.lstrip("# ").strip()
-                break
-
-        pages.append(
-            {
-                "title": title,
-                "path": str(rel_path),
-                "content": content,
-                "type": "wiki",
-            }
-        )
-
-    return pages
-
 
 def load_chunks():
     """Load RAG chunks from data/chunks.json."""
@@ -107,18 +75,6 @@ def load_chunks():
 # ---------------------------------------------------------------------------
 # Existing-output loaders (what's already been exported)
 # ---------------------------------------------------------------------------
-
-def load_existing_wiki_pages(path: Path) -> tuple[list[dict], set[str]]:
-    """
-    Returns (existing_pages, existing_paths).
-    existing_pages include their stored embeddings so we don't regenerate them.
-    """
-    if not path.exists():
-        return [], set()
-    pages = json.loads(path.read_text(encoding="utf-8"))
-    existing_paths = {p["path"] for p in pages}
-    return pages, existing_paths
-
 
 def load_existing_chunks(
     chunks_path: Path,
@@ -161,34 +117,6 @@ def main():
     # -----------------------------------------------------------------------
     # WIKI PAGES
     # -----------------------------------------------------------------------
-    print("Loading wiki pages…")
-    source_wiki = load_wiki_pages()
-    print(f"  {len(source_wiki)} wiki page(s) found in source")
-
-    existing_wiki, existing_wiki_paths = load_existing_wiki_pages(wiki_out)
-    if existing_wiki:
-        print(f"  {len(existing_wiki)} wiki page(s) already in output — will skip duplicates")
-
-    # Filter to genuinely new pages only
-    new_wiki = [p for p in source_wiki if p["path"] not in existing_wiki_paths]
-    print(f"  {len(new_wiki)} new wiki page(s) to add")
-
-    if new_wiki and gemini_key:
-        needs_embedding = [p for p in new_wiki if "embedding" not in p]
-        if needs_embedding:
-            print(f"  Generating embeddings for {len(needs_embedding)} new wiki page(s)…")
-            texts = [p["content"] for p in needs_embedding]
-            embs = get_embeddings_batch(texts, gemini_key, batch_pause=0.05)
-            for page, emb in zip(needs_embedding, embs):
-                page["embedding"] = emb
-            print("  Wiki embeddings done.")
-    elif new_wiki and not gemini_key:
-        print("  WARN: No GEMINI_API_KEY — new wiki pages exported without embeddings")
-
-    # Merge and write
-    merged_wiki = existing_wiki + new_wiki
-    wiki_out.write_text(json.dumps(merged_wiki, indent=2), encoding="utf-8")
-    print(f"  Saved {len(merged_wiki)} total wiki page(s) → {wiki_out}\n")
 
     # -----------------------------------------------------------------------
     # RAG CHUNKS
@@ -222,11 +150,14 @@ def main():
         print("  Chunk embeddings done.")
 
     # -----------------------------------------------------------------------
-    # Build merged embeddings → FAISS index
+    # Build FAISS index from source_chunks (offline data/chunks.json).
+    # source_chunks has embeddings for ALL chunks — old ones stored from ingest,
+    # new ones just generated above. existing_text_chunks (webapp/data/chunks.json)
+    # has NO embeddings so it must NOT be used here.
     # -----------------------------------------------------------------------
-    all_chunks = existing_text_chunks + new_chunks
-    all_embs = [c.get("embedding") for c in all_chunks]
-    has_all_embs = all(e is not None for e in all_embs) and all_embs
+    all_embs = [c.get("embedding") for c in source_chunks]
+    has_all_embs = bool(all_embs) and all(e is not None for e in all_embs)
+    missing_count = sum(1 for e in all_embs if e is None)
 
     if has_all_embs:
         try:
@@ -244,17 +175,17 @@ def main():
             )
         except ImportError:
             print("  [Skip] faiss not installed — run: pip install faiss-cpu")
-    elif not new_chunks:
-        print("  No new chunks — FAISS index unchanged.")
+    elif not source_chunks:
+        print("  No chunks — FAISS index unchanged.")
     else:
-        print("  WARN: Not all chunks have embeddings — skipping FAISS export")
+        print(f"  WARN: {missing_count}/{len(source_chunks)} chunks missing embeddings — skipping FAISS export")
 
     # -----------------------------------------------------------------------
-    # Save merged text-only chunks JSON (no embeddings)
+    # Save text-only chunks JSON (no embeddings) — order matches source_chunks
+    # so chunk[i] always aligns with FAISS vector[i].
     # -----------------------------------------------------------------------
-    merged_chunks = existing_text_chunks + new_chunks
     chunks_text = [
-        {k: v for k, v in c.items() if k != "embedding"} for c in merged_chunks
+        {k: v for k, v in c.items() if k != "embedding"} for c in source_chunks
     ]
     chunks_out.write_text(json.dumps(chunks_text, indent=2), encoding="utf-8")
     print(
@@ -277,12 +208,11 @@ def main():
     # -----------------------------------------------------------------------
     # Summary
     # -----------------------------------------------------------------------
-    total_docs = len(merged_wiki) + len(merged_chunks)
-    has_embeddings = sum(1 for d in merged_wiki + merged_chunks if "embedding" in d)
+    total_docs =len(source_chunks)
+    has_embeddings = sum(1 for d in source_chunks if "embedding" in d)
     print(f"\n{'='*50}")
     print(f"  Export complete: {total_docs} total documents ({has_embeddings} with embeddings)")
-    print(f"  Wiki pages : {len(merged_wiki)} total ({len(new_wiki)} new)")
-    print(f"  RAG chunks : {len(merged_chunks)} total ({len(new_chunks)} new)")
+    print(f"  RAG chunks : {len(source_chunks)} total ({len(new_chunks)} new)")
     print(f"  Output     : {WEBAPP_DATA}/")
     print(f"{'='*50}\n")
 
