@@ -257,14 +257,34 @@ def tool_graph_traverse(slug: str, hops: int = 1, max_nodes: int = 8, graph: dic
     Return the seed page itself + BFS neighbor pages, each with full markdown content.
     WIKI LLM calls this to fetch a page it identified from index.md, then reads the
     content to decide relevance. It does NOT copy content into its output JSON.
+    If the slug is not found exactly, falls back to a partial-match on graph node keys.
     """
     if graph is None:
         graph = _load_graph()
 
     output = []
 
-    # Always include the seed node's own content first
+    # Resolve slug — exact match first, then partial match as fallback
+    resolved_slug = slug
     seed_data = graph["nodes"].get(slug, {})
+    if not seed_data:
+        # Try: slug is a substring of a node key, or a node key is a substring of slug
+        slug_lower = slug.lower()
+        candidates = [
+            k for k in graph["nodes"]
+            if slug_lower in k.lower() or k.lower() in slug_lower
+        ]
+        if candidates:
+            # Prefer shorter (more specific) matches
+            resolved_slug = min(candidates, key=len)
+            seed_data = graph["nodes"][resolved_slug]
+            print(f"[GraphTraverse] Slug '{slug}' not found → fuzzy match '{resolved_slug}'")
+        else:
+            print(f"[GraphTraverse] Slug '{slug}' not found in graph and no fuzzy match — returning empty")
+            return [{"slug": slug, "title": slug, "type": "unknown", "edge": "seed",
+                     "content": f"[Page '{slug}' not found in wiki graph]"}]
+
+    # Always include the seed node's own content first
     seed_rel_path = seed_data.get("path", "")
     seed_content = ""
     if seed_rel_path:
@@ -274,17 +294,23 @@ def tool_graph_traverse(slug: str, hops: int = 1, max_nodes: int = 8, graph: dic
                 seed_content = seed_full_path.read_text(encoding="utf-8")
             except Exception:
                 seed_content = ""
+        else:
+            print(f"[GraphTraverse] File not found on disk: {seed_full_path}")
+    else:
+        print(f"[GraphTraverse] Node '{resolved_slug}' has no path in graph")
+
+    print(f"[GraphTraverse] Seed '{resolved_slug}' — content {'found' if seed_content else 'EMPTY'}")
     output.append({
-        "slug": slug,
-        "title": seed_data.get("title", slug),
+        "slug": resolved_slug,
+        "title": seed_data.get("title", resolved_slug),
         "type": seed_data.get("type", "unknown"),
         "edge": "seed",
         "content": seed_content,
     })
 
     # BFS neighbors
-    results = traverse(graph, slug, hops=hops)[:max_nodes]
-    seen = {slug}
+    results = traverse(graph, resolved_slug, hops=hops)[:max_nodes]
+    seen = {resolved_slug}
     for r in results:
         node = r["node"]
         if node in seen:
@@ -314,6 +340,8 @@ def tool_graph_traverse(slug: str, hops: int = 1, max_nodes: int = 8, graph: dic
             "content": content,
         })
 
+    titles = [p["title"] for p in output]
+    print(f"[GraphTraverse] Returning {len(output)} pages: {titles}")
     return output
 
 
@@ -470,23 +498,32 @@ You have the wiki catalog in <index_md> above, but **no page content yet**.
 You must call `graph_traverse` to fetch content before you can judge relevance.
 
 ---
-## STEP 1 — Identify candidates & fetch content
+## STEP 1 — Identify candidates from index.md and fetch content
 
-Read index.md and identify the slugs most likely to answer the query.
-Call `graph_traverse` on those slugs (parallel calls allowed — call as many as needed).
-Each call returns the page itself + its neighbors, all with full content.
+Scan index.md for entries whose title or description relates to the query.
+**Extract the slug EXACTLY as it appears in index.md** — do NOT invent or guess slugs.
+
+index.md uses wikilink syntax: `[[path/to/slug|Title]]`
+The slug = the part after the last `/` and before `|` or `.md`.
+Example: `[[concepts/microequity|Microequity]]` → slug is `microequity`
+
+Call `graph_traverse` on the slugs you found (parallel calls allowed).
+Each call returns that page + its neighbors with full content.
+
+**If the query topic does not appear anywhere in index.md** → skip fetching,
+output `{"sufficient": false, "selected_slugs": [], "note": "Topic not in wiki"}`.
 
 ---
 ## STEP 2 — Judge the fetched content (strict)
 
 For every page returned ask:
-> *"Can I point to a specific passage here that directly answers the question — not just the same keywords?"*
+> *"Does this page contain a specific passage that directly answers the question — not just the same keywords?"*
 
 - **`sufficient: true`** — at least one page has a direct, specific answer.
-- **`sufficient: false`** — pages are only topically related; the actual answer is absent. **Keyword overlap is NOT enough.**
+- **`sufficient: false`** — pages are topically nearby but the actual answer is absent.
 
 **Default to `sufficient: false` when in doubt.** MAIN_LLM has a RAG fallback.
-Even when `sufficient: false`, include the closest slugs so MAIN_LLM has partial wiki context.
+Even when `sufficient: false`, include the closest slugs found so MAIN_LLM has partial wiki context.
 
 ---
 ## Output (JSON only — no other text)
@@ -500,11 +537,10 @@ Even when `sufficient: false`, include the closest slugs so MAIN_LLM has partial
 ```
 
 ## SLUG FORMAT — CRITICAL
-Bare filename, no path prefix, no extension.
+- Only use slugs you found in index.md. **Never invent a slug.**
+- Bare filename only — no path prefix, no extension.
 - ✅ `"thinking-patterns"`, `"microequity"`, `"prof-bhagwan-chowdhry"`
-- ❌ `"persona/thinking-patterns"`, `"wiki/stub-foo.md"`
-
-From index.md wikilinks like `[[persona/thinking-patterns|Title]]` → take only the part after the last `/` and before `|` or `.md`.\
+- ❌ `"persona/thinking-patterns"`, `"random-forest"` (unless that exact string appears in index.md)\
 """
 
 # Maintenance prompt: WIKI LLM's job when writing a new wiki page from synthesis
@@ -559,13 +595,15 @@ def run_wiki_llm(
 
     messages = [{"role": "user", "content": f"User query: {user_query}"}]
 
-    # First call — LLM should call graph_traverse to fetch page content
+    # First call — force at least one graph_traverse call so the LLM always
+    # fetches page content before judging relevance (tool_choice "any").
     response = client.messages.create(
         model=WIKI_LLM_MODEL,
         max_tokens=1024,
         system=system,
         messages=messages,
         tools=_WIKI_LLM_TOOLS,
+        tool_choice={"type": "any"},
     )
 
     # Execute all graph_traverse tool calls, then do one follow-up call
@@ -758,16 +796,13 @@ def run_main_llm_streaming(
     messages = _build_wiki_messages(wiki_context, wiki_note, user_query)
     tools_arg = {} if sufficient else {"tools": _MAIN_LLM_TOOLS}
 
-    # Sliding tail buffer: we hold back up to len(_METADATA_MARKER) chars so we
-    # can detect the marker even if it straddles two chunks.
-    # Also match the bare "[METADATA]" variant (no surrounding newlines) the LLM
-    # sometimes emits, so we never miss the split point.
     _BARE_MARKER = "[METADATA]"
     tail_buffer = ""
     metadata_mode = False
     metadata_buf = ""
-    full_response = ""   # accumulates everything; fallback if marker is absent
+    full_response = ""
     final_msg = None
+    rag_sources_used: list = []   # track sources from every rag_search call
 
     for _ in range(2):  # at most one tool call (rag_search)
         with client.messages.stream(
@@ -786,7 +821,6 @@ def run_main_llm_streaming(
 
                 tail_buffer += text_chunk
 
-                # Check for either marker variant
                 marker_hit = None
                 for marker in (_METADATA_MARKER, _BARE_MARKER):
                     if marker in tail_buffer:
@@ -809,7 +843,6 @@ def run_main_llm_streaming(
             final_msg = stream.get_final_message()
 
         if final_msg.stop_reason != "tool_use":
-            # Flush any remaining tail (marker never appeared)
             if not metadata_mode and tail_buffer:
                 yield ("text", tail_buffer)
                 tail_buffer = ""
@@ -826,13 +859,17 @@ def run_main_llm_streaming(
                     faiss_index=faiss_index,
                     top_k=block.input.get("top_k", 7),
                 )
+                # Track unique source titles for synthetic metadata fallback
+                for r in rag_results:
+                    src = r.get("source", "")
+                    if src and src not in rag_sources_used:
+                        rag_sources_used.append(src)
                 tool_results.append({
                     "type": "tool_result",
                     "tool_use_id": block.id,
                     "content": json.dumps(rag_results, ensure_ascii=False),
                 })
 
-        # Flush safe portion of tail before continuing with tool results
         safe_len = max(0, len(tail_buffer) - len(_METADATA_MARKER))
         if safe_len > 0:
             yield ("text", tail_buffer[:safe_len])
@@ -841,8 +878,10 @@ def run_main_llm_streaming(
         messages.append({"role": "assistant", "content": final_msg.content})
         messages.append({"role": "user", "content": tool_results})
 
-    # Parse metadata — try the captured metadata_buf first, then fall back to
-    # scanning the full response for any JSON object (handles missing marker).
+    # --- Metadata parsing (3-tier fallback) ---
+    # Tier 1: clean metadata_buf captured after [METADATA] marker
+    # Tier 2: scan full_response for any JSON with a "sources" key
+    # Tier 3: synthetic metadata built from what we know was used
     metadata = None
     for candidate in (metadata_buf.strip(), full_response):
         if not candidate:
@@ -857,8 +896,13 @@ def run_main_llm_streaming(
                 break
 
     if metadata is None:
-        print(f"[MainLLM] Metadata parse failed. Raw: {metadata_buf[:200]!r}")
-        metadata = {"sources": {"wiki": [], "rag": []}, "new_synthesis": "", "should_wiki_update": False}
+        print(f"[MainLLM] Metadata parse failed — using synthetic metadata. Raw: {metadata_buf[:100]!r}")
+        wiki_titles = [p.get("title", p.get("slug", "")) for p in wiki_context]
+        metadata = {
+            "sources": {"wiki": wiki_titles, "rag": rag_sources_used},
+            "new_synthesis": "",
+            "should_wiki_update": False,
+        }
 
     yield ("metadata", metadata)
 

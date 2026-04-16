@@ -32778,6 +32778,24 @@
         "visualization"
       ],
       "path": "wiki\\synthesized\\eigenvectors-visual-and-spectral-bridge.md"
+    },
+    "random-forest-double-decorrelation": {
+      "type": "synthesized",
+      "title": "Random Forest: Double Decorrelation as the Core Mechanism",
+      "aliases": [
+        "random-forest-mechanism",
+        "random-forest-vs-bagging"
+      ],
+      "tags": [
+        "random-forest",
+        "ensemble-methods",
+        "bagging",
+        "decorrelation",
+        "overfitting",
+        "feature-subsets",
+        "bootstrap"
+      ],
+      "path": "wiki/synthesized/random-forest-double-decorrelation.md"
     }
   },
   "edges": [
@@ -53410,6 +53428,21 @@
       "from": "eigenvectors-visual-and-spectral-bridge",
       "to": "basis",
       "type": "related"
+    },
+    {
+      "from": "random-forest-double-decorrelation",
+      "to": "bagging",
+      "type": "extends"
+    },
+    {
+      "from": "random-forest-double-decorrelation",
+      "to": "bias-variance-tradeoff",
+      "type": "relates-to"
+    },
+    {
+      "from": "random-forest-double-decorrelation",
+      "to": "automatic-feature-selection",
+      "type": "relates-to"
     }
   ]
 }

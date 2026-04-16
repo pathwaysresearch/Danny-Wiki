@@ -213,6 +213,6 @@ Master catalog of the Foster Provost personal knowledge base. Consult before eve
 - [[concepts/black-box-predictive-models|Black Box Predictive Models]] — Massive models misleadingly described with causal interpretations.
 - [[concepts/blinding|Blinding]] — Study design hiding treatment assignment from subjects/investigators.
 - [[concepts/blobs|BLOBs (Binary Large Objects)]] — Audio, video, graph files needing structuring before analysis.
-- [[concepts/block
-
 - [[synthesized/eigenvectors-visual-and-spectral-bridge|Eigenvectors: Visual Intuition and the Spectral Bridge]] — synthesized from query
+
+- [[synthesized/random-forest-double-decorrelation|Random Forest: Double Decorrelation as the Core Mechanism]] — synthesized from query

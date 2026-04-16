@@ -200,3 +200,7 @@ Append-only chronological record of ingests, queries, and wiki updates.
 ## [2026-04-16] synthesize | eigenvectors-visual-and-spectral-bridge
 - Pages created: eigenvectors-visual-and-spectral-bridge.md
 - From query: Can you explain eigen vectors visually?
+
+## [2026-04-16] synthesize | random-forest-double-decorrelation
+- Pages created: random-forest-double-decorrelation.md
+- From query: what is random forest?
