@@ -794,7 +794,11 @@ Escalation is a response to a gap, not a habit. A good memory-only answer should
 {rag_instruction}
 
 ## Formatting
-Math: use (...) for inline, [...] for display. Never $...$. Use LaTeX syntax.
+Math: use LaTeX syntax inside proper delimiters.
+- Inline math: wrap in \( ... \) — e.g. \(A \cdot v = \lambda v\)
+- Display math: wrap in \[ ... \] on its own line — e.g. \[A \cdot v = \lambda v\]
+- Do NOT use bare parentheses or bare square brackets around math — they render as literal text.
+- Do NOT use $...$ or $$...$$.
 
 ## Output format — EVERY RESPONSE MUST END WITH A METADATA BLOCK
 
