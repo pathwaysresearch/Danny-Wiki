@@ -21,3 +21,6 @@ A core concept from the book "Data Science for Business" that involves approachi
 
 ---
 *Extracted from: Foster Provost  Nyu Stern  Knowledge Base*
+
+---
+*Also referenced in: Data Science For Business What You Need To By Foster Provost Audiobook Preview 50Djesd L9M*

@@ -2,6 +2,8 @@
 type: concept
 aliases: [Learning Curve]
 relationships:
+  - target: data-assets
+    type: measures_return_on
   - target: predictive-analytics
     type: is_a_tool_for
 tags: [tool, analytics, machine-learning]
@@ -18,3 +20,6 @@ An analytic tool that shows the relationship between the amount of training data
 
 ---
 *Extracted from: Foster Provost  Nyu Stern  Knowledge Base*
+
+---
+*Also referenced in: Foster Provost Is Bigger Really Better Predictive Analytics With Fine Grained Be 1Jzmiaflh2C*

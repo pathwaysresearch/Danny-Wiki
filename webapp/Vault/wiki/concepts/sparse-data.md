@@ -18,3 +18,6 @@ A data characteristic where there are massive numbers of individual behaviors, b
 
 ---
 *Extracted from: Foster Provost  Nyu Stern  Knowledge Base*
+
+---
+*Also referenced in: Foster Provost Is Bigger Really Better Predictive Analytics With Fine Grained Be 1Jzmiaflh2C*

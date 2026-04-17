@@ -48,3 +48,6 @@ A field focused on fundamental principles and data-analytic thinking to extract 
 
 ---
 *Also referenced in: Practical Statistics For Data Scientists   50+ Essential    Bruce, Peter, Bruce, Andrew, Gedeck, Pet Content*
+
+---
+*Also referenced in: Data Science For Business What You Need To By Foster Provost Audiobook Preview 50Djesd L9M*

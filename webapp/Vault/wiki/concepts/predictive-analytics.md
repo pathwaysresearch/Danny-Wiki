@@ -2,6 +2,12 @@
 type: concept
 aliases: [Predictive Analytics]
 relationships:
+  - target: big-data
+    type: leverages
+  - target: learning-curve
+    type: is_evaluated_by
+  - target: fine-grained-behavior-data
+    type: uses
   - target: expected-value-framework
     type: is_evaluated_by
 tags: [data-science, machine-learning, analytics]
@@ -21,3 +27,6 @@ The area of data science that has had the most business impact for years, which 
 
 ---
 *Also referenced in: Foster Provost  Nyu Stern  Knowledge Base*
+
+---
+*Also referenced in: Foster Provost Is Bigger Really Better Predictive Analytics With Fine Grained Be 1Jzmiaflh2C*

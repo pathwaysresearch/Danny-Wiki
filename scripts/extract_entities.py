@@ -26,7 +26,7 @@ import re
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
-VAULT = PROJECT_ROOT / "Vault"
+VAULT = PROJECT_ROOT / "webapp/Vault"
 WIKI_DIR = VAULT / "wiki"
 CONCEPTS_DIR = WIKI_DIR / "concepts"
 ENTITIES_DIR = WIKI_DIR / "entities"
@@ -35,7 +35,7 @@ CHUNKS_FILE = DATA_DIR / "chunks.json"
 EXTRACTED_FILE = DATA_DIR / "extracted.json"   # tracks processed chunk hashes
 
 sys.path.insert(0, str(Path(__file__).parent))
-from wiki_logger import log_to_wiki_log
+
 
 GEMINI_MODEL = "gemini-2.5-pro"
 GEMINI_URL_TEMPLATE = (
@@ -518,19 +518,9 @@ def extract_source(source_filter: str, api_key: str):
     for e in written["entities"]:
         print(f"      - {e}")
 
-    from graph import save_graph
-    graph = save_graph()
-    print(f"\n  Graph rebuilt: {len(graph['nodes'])} nodes, {len(graph['edges'])} edges")
-
-    log_to_wiki_log(
-        "ingest",
-        source_name,
-        {
-            "route": "RAG+stub",
-            "pages_created": written["concepts"] + written["entities"],
-            "chunks": len(chunks),
-        },
-    )
+    from graph import update_graph
+    graph = update_graph()
+    print(f"\n  Graph updated: {len(graph['nodes'])} nodes, {len(graph['edges'])} edges")
 
     return written
 

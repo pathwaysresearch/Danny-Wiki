@@ -38,3 +38,6 @@ An NYU Stern Professor and Director of the AI and Data Analytics Initiative who 
 
 ---
 *Also referenced in: Introduction To Machine Learning With Python   A Guide For    Andreas C  MüLler And Sarah Guido    1 Content*
+
+---
+*Also referenced in: Data Science For Business What You Need To By Foster Provost Audiobook Preview 50Djesd L9M*

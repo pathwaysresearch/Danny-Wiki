@@ -2,6 +2,8 @@
 type: concept
 aliases: [Big Data]
 relationships:
+  - target: gartner-hype-cycle
+    type: is_positioned_on
   - target: mapreduce
     type: processed_by
   - target: data-storage-technology
@@ -31,3 +33,6 @@ A supporting technology for data science that Gartner placed near the peak of in
 
 ---
 *Also referenced in: Data Analytics Made Accessible Content*
+
+---
+*Also referenced in: Foster Provost Is Bigger Really Better Predictive Analytics With Fine Grained Be 1Jzmiaflh2C*

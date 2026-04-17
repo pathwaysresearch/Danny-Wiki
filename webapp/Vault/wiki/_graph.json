@@ -32795,7 +32795,107 @@
         "feature-subsets",
         "bootstrap"
       ],
-      "path": "wiki/synthesized/random-forest-double-decorrelation.md"
+      "path": "wiki\\synthesized\\random-forest-double-decorrelation.md"
+    },
+    "index": {
+      "type": "unknown",
+      "title": "Wiki Index",
+      "aliases": [],
+      "tags": [],
+      "path": "wiki\\index.md"
+    },
+    "log": {
+      "type": "unknown",
+      "title": "Wiki Log",
+      "aliases": [],
+      "tags": [],
+      "path": "wiki\\log.md"
+    },
+    "data-assets": {
+      "type": "concept",
+      "title": "Data Assets",
+      "aliases": [
+        "Data Assets"
+      ],
+      "tags": [
+        "data-strategy",
+        "business-value"
+      ],
+      "path": "wiki\\concepts\\data-assets.md"
+    },
+    "gartner-hype-cycle": {
+      "type": "concept",
+      "title": "Gartner Hype Cycle",
+      "aliases": [
+        "Gartner Hype Cycle"
+      ],
+      "tags": [
+        "technology-adoption",
+        "framework"
+      ],
+      "path": "wiki\\concepts\\gartner-hype-cycle.md"
+    },
+    "explanation-trick": {
+      "type": "concept",
+      "title": "Explanation Trick (Evidence Counterfactual)",
+      "aliases": [
+        "Explanation Trick (Evidence Counterfactual)"
+      ],
+      "tags": [
+        "model-interpretability",
+        "data-science",
+        "counterfactual-reasoning"
+      ],
+      "path": "wiki\\concepts\\explanation-trick.md"
+    },
+    "fine-grained-data": {
+      "type": "concept",
+      "title": "Fine-grained Data",
+      "aliases": [
+        "Fine-grained Data"
+      ],
+      "tags": [
+        "data-type",
+        "big-data"
+      ],
+      "path": "wiki\\concepts\\fine-grained-data.md"
+    },
+    "privacy-friendly-cloaking-device": {
+      "type": "concept",
+      "title": "Privacy-friendly Cloaking Device",
+      "aliases": [
+        "Privacy-friendly Cloaking Device"
+      ],
+      "tags": [
+        "privacy",
+        "data-science",
+        "social-media"
+      ],
+      "path": "wiki\\concepts\\privacy-friendly-cloaking-device.md"
+    },
+    "fairway-golf-club": {
+      "type": "entity",
+      "title": "Fairway Golf Club",
+      "aliases": [
+        "Fairway Golf Club"
+      ],
+      "tags": [
+        "organization",
+        "case-study"
+      ],
+      "path": "wiki\\entities\\fairway-golf-club.md"
+    },
+    "rolex": {
+      "type": "entity",
+      "title": "Rolex",
+      "aliases": [
+        "Rolex"
+      ],
+      "tags": [
+        "company",
+        "case-study"
+      ],
+      "path": "wiki\\entities\\rolex.md"
     }
   },
   "edges": [
@@ -53443,6 +53543,1106 @@
       "from": "random-forest-double-decorrelation",
       "to": "automatic-feature-selection",
       "type": "relates-to"
+    },
+    {
+      "from": "data-science-for-business",
+      "to": "data-science",
+      "type": "is_about"
+    },
+    {
+      "from": "data-science-for-business",
+      "to": "data-analytic-thinking",
+      "type": "is_about"
+    },
+    {
+      "from": "data-science-for-business",
+      "to": "data-mining",
+      "type": "is_about"
+    },
+    {
+      "from": "index",
+      "to": "persona/foster-provost",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "persona/thinking-patterns",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "persona/intellectual-evolution",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "persona/rhetorical-style-and-pedagogy",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "persona/causal-vs-predictive-targeting",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "persona/counterfactual-explanations-for-inference",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "persona/data-leakage-in-applied-data-science",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "persona/mentor-network-and-influences",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/a-b-test",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/a-b-testing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ab-test",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ab-testing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/absolute-value-of-a-complex-number",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/accumulation-methods-in-pandas",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/accuracy",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/activation-function",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/active-active-failover",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/active-learning",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/active-passive-configuration",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/activity-log-monitor",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/adaboost",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/adapter-container",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/adaptive-wisdom-of-crowds",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/addition-in-a-vector-space",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/additive-identity",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/additive-inverse",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/adjoint-of-a-linear-map",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/adjusted-r-squared",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/advanced-persistent-threat",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/advanced-regularization",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/agentic-ai",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/agglomerative-algorithm",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/agglomerative-clustering",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/aggregation-in-pandas-groupby",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/agile-api-development",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-as-a-successor",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-as-a-tool-for-augmentation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-as-an-amplifier-of-knowledge",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-as-an-augmentation-tool",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-generated-likeness",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-hallucination",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-in-medicine",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-insight",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-managed-affairs",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-model-training",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-obligations",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-programmed-ai",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-restrictions",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-rights",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai-scale-advantage",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ai",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/akaike-information-criterion",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/algebraic-multiplicity",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/algorithm-chains-and-pipelines",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/algorithmic-amplification",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/all-subset-regression",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/alpha",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/alternating-bilinear-form",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/alternating-multilinear-form",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/alternative-hypothesis",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ambassador-container",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/analysis-of-variance-anova",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/analysis-of-variance",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/analytic-engineering",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/anatomy-of-a-learning-algorithm",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/annihilator",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/annotations-in-matplotlib",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/anomaly-detection",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/anonymous-attacker",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/anonymous-lambda-function",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-as-a-product",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-authentication",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-business-case",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-community-management",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-compliance-tracking",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-deprecation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-economy",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-ecosystem",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-life-cycle",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-management-system",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-monetization",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-performance",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-risk-management",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-testing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api-versioning",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/api",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/apis-as-products",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/application-virtualization",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/apply-method-in-groupby",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/apply-method-pandas",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/apply-on-groupby",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/applymap-method-pandas",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/apriori-algorithm",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/apriori-technique",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/area-under-the-curve-auc",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/area-under-the-roc-curve",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/argsort",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/argument-unpacking-args-kwargs",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-aggregation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-based-computing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-broadcasting",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-concatenation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-flattening",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-indexing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-oriented-computing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-oriented-programming",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-persistence",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-reshaping",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-slicing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-sorting",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-splitting",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-strides",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-transposing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/array-view",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/artificial-neural-network",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/artificial-neural-networks",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/artist-consent",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/artistic-influence",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/association-rule-mining",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/association-rules",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/asymmetric-encryption",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/attack",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/attacker",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/attention-economy",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/attention-mechanism",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/attribution-modeling",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/auc",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/audience-selection-for-on-line-brand-advertising",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/audit-monitor",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/augmented-collective-beings",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/authorities",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/auto-sharding-and-replication",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/autoencoder",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/automated-scaling-listener",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/automatic-feature-selection",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/automation-frontier",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/autonomic-computing",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/autoregressive-process",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/availability-in-cloud-security",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/availability-rate-metric",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/average-precision",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/averaging-model-combination",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/axes-customization",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/axis-index-transformation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/back-propagation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/backpropagation-through-time",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/backpropagation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/backward-elimination",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bag-of-words",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bagging",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/ball-in-a-vector-space",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bandit-algorithms",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bandit-modeling",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bandit-problem",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bar-chart",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bar-graph",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bar-plot",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/base-container-image",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/base-rate",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/basis-of-a-tensor-product-space",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/basis",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/batch-gradient-descent",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/batch-normalization",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bayes-rule",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bayes-theorem",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bayesian-hyperparameter-optimization",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bayesian-inference",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bayesian-information-criteria-bic",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bernoulli-nb",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/beta-distribution",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/betweenness-centrality",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bias-in-machine-learning",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bias-variance-trade-off",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bias-variance-tradeoff",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bias",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bifurcation-of-humanity",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/big-data-and-data-science",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/big-data",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/big-o-notation",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bigram-model",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bigram",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bilinear-form",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bilinear-functional",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/bilinear-map",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/billing-management-system",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/binary-classification",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/binary-cross-entropy",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/binary-data",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/binning",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/binomial-distribution",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/binomial-trial",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/biometric-scanner",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/biometrics",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/biplot",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/black-box-predictive-models",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/blinding",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "concepts/blobs",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "synthesized/eigenvectors-visual-and-spectral-bridge",
+      "type": "references"
+    },
+    {
+      "from": "index",
+      "to": "synthesized/random-forest-double-decorrelation",
+      "type": "references"
+    },
+    {
+      "from": "big-data",
+      "to": "gartner-hype-cycle",
+      "type": "is_positioned_on"
+    },
+    {
+      "from": "data-assets",
+      "to": "learning-curve",
+      "type": "return_is_measured_by"
+    },
+    {
+      "from": "fine-grained-behavior-data",
+      "to": "predictive-analytics",
+      "type": "improves"
+    },
+    {
+      "from": "gartner-hype-cycle",
+      "to": "gartner",
+      "type": "created_by"
+    },
+    {
+      "from": "gartner-hype-cycle",
+      "to": "big-data",
+      "type": "positions"
+    },
+    {
+      "from": "learning-curve",
+      "to": "data-assets",
+      "type": "measures_return_on"
+    },
+    {
+      "from": "predictive-analytics",
+      "to": "big-data",
+      "type": "leverages"
+    },
+    {
+      "from": "predictive-analytics",
+      "to": "learning-curve",
+      "type": "is_evaluated_by"
+    },
+    {
+      "from": "predictive-analytics",
+      "to": "fine-grained-behavior-data",
+      "type": "uses"
+    },
+    {
+      "from": "gartner",
+      "to": "gartner-hype-cycle",
+      "type": "created"
+    },
+    {
+      "from": "corporate-residence-fraud-detection",
+      "to": "explanation-trick",
+      "type": "is_example_for"
+    },
+    {
+      "from": "explanation-trick",
+      "to": "fine-grained-data",
+      "type": "is_applied_to"
+    },
+    {
+      "from": "privacy-friendly-cloaking-device",
+      "to": "explanation-trick",
+      "type": "is_enabled_by"
+    },
+    {
+      "from": "facebook",
+      "to": "explanation-trick",
+      "type": "is_example_for"
+    },
+    {
+      "from": "facebook",
+      "to": "privacy-friendly-cloaking-device",
+      "type": "is_potential_implementer_of"
+    },
+    {
+      "from": "fairway-golf-club",
+      "to": "rolex",
+      "type": "transacted_with"
+    },
+    {
+      "from": "rolex",
+      "to": "corporate-residence-fraud-detection",
+      "type": "is_example_in"
+    },
+    {
+      "from": "rolex",
+      "to": "fairway-golf-club",
+      "type": "transacted_with"
     }
   ]
 }

@@ -2,6 +2,10 @@
 type: entity
 aliases: [Facebook]
 relationships:
+  - target: explanation-trick
+    type: is_example_for
+  - target: privacy-friendly-cloaking-device
+    type: is_potential_implementer_of
   - target: graphql
     type: created
   - target: friend-suggestion-algorithms
@@ -32,3 +36,6 @@ A social media platform that utilizes friend suggestion algorithms (PYMK) and ne
 
 ---
 *Also referenced in: Practical Statistics For Data Scientists   50+ Essential    Bruce, Peter, Bruce, Andrew, Gedeck, Pet Content*
+
+---
+*Also referenced in: Foster Provost Understanding Decisions Driven By Big Data   Strata Europe 2014 L7Xpn0Xuckw*

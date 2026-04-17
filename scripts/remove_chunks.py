@@ -1,17 +1,27 @@
 """
-Remove RAG chunks from chunks.json and chunks.faiss by source path prefix.
+Remove RAG chunks by source path prefix from chunks.json (and chunks.faiss if aligned).
 
-Chunks whose 'source' field starts with the given prefix are removed.
-The FAISS index is rebuilt from the surviving vectors (extracted via reconstruct_n).
-Both files are backed up before any modification.
+TWO MODES depending on which file you target:
+
+  --offline (default)
+      Cleans data/chunks.json — the offline pipeline file that stores embeddings.
+      After running, execute:  python scripts/export_for_web.py
+      That rebuilds webapp/data/chunks.json + chunks.faiss from the stored embeddings.
+      No re-embedding. No Gemini API calls.
+
+  --deployed
+      Cleans webapp/data/chunks.json + webapp/data/chunks.faiss directly.
+      Only works when the two files are in sync (same entry count).
+      Use this when you just need to patch a deployed instance without touching
+      the offline pipeline files.
 
 Usage:
-    python scripts/remove_chunks.py <source-path-prefix>
+    python scripts/remove_chunks.py <source-path-prefix>              # offline mode
+    python scripts/remove_chunks.py <source-path-prefix> --deployed   # deployed mode
 
 Examples:
     python scripts/remove_chunks.py "Vault/raw/books/some-book.md"
-    python scripts/remove_chunks.py "Vault/raw/some-folder/"
-    python scripts/remove_chunks.py "E:/OtherProject/raw/"
+    python scripts/remove_chunks.py "E:/OtherProject/raw/" --deployed
 
 Path matching is case-insensitive and normalised to forward slashes.
 """
@@ -31,8 +41,7 @@ except ImportError:
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 WEBAPP_DATA  = PROJECT_ROOT / "webapp" / "data"
-CHUNKS_JSON  = WEBAPP_DATA / "chunks.json"
-FAISS_PATH   = WEBAPP_DATA / "chunks.faiss"
+OFFLINE_DATA = PROJECT_ROOT / "data"
 
 
 # ---------------------------------------------------------------------------
@@ -40,122 +49,190 @@ FAISS_PATH   = WEBAPP_DATA / "chunks.faiss"
 # ---------------------------------------------------------------------------
 
 def _norm(path: str) -> str:
-    """Normalise a path for prefix comparison: forward slashes, lowercase."""
     return path.replace("\\", "/").lower()
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
-def main():
-    if len(sys.argv) < 2:
-        print(__doc__)
-        sys.exit(1)
-
-    prefix = _norm(sys.argv[1])
-    # Ensure a trailing slash when the prefix looks like a directory
-    # (no extension) so we don't accidentally match "foo-bar.md" when
-    # the user meant to target "foo/" only.
-    if not prefix.endswith("/") and "." not in Path(prefix).name:
-        prefix += "/"
-
-    print(f"Source prefix  : {prefix!r}")
-    print(f"chunks.json    : {CHUNKS_JSON}")
-    print(f"chunks.faiss   : {FAISS_PATH}\n")
-
-    # ---- Load chunks.json --------------------------------------------------
-    if not CHUNKS_JSON.exists():
-        print(f"Error: {CHUNKS_JSON} not found.")
-        sys.exit(1)
-
-    chunks = json.loads(CHUNKS_JSON.read_text(encoding="utf-8"))
-    print(f"Loaded {len(chunks)} chunks from chunks.json")
-
-    # ---- Classify ----------------------------------------------------------
-    keep_idx   = []
-    remove_idx = []
+def _classify(chunks, prefix):
+    keep_idx, remove_idx = [], []
     for i, chunk in enumerate(chunks):
         src = _norm(chunk.get("source", ""))
         if src.startswith(prefix):
             remove_idx.append(i)
         else:
             keep_idx.append(i)
+    return keep_idx, remove_idx
 
-    if not remove_idx:
-        print(f"No chunks match source prefix {prefix!r}  — nothing to do.")
-        sys.exit(0)
 
-    # Show affected sources
-    affected_sources = sorted({_norm(chunks[i].get("source", "")) for i in remove_idx})
+def _print_summary(chunks, remove_idx, prefix):
+    keep_idx = [i for i in range(len(chunks)) if i not in set(remove_idx)]
+    affected = sorted({_norm(chunks[i].get("source", "")) for i in remove_idx})
     print(f"\nChunks to remove : {len(remove_idx)}")
     print(f"Chunks to keep   : {len(keep_idx)}")
-    print(f"Affected sources ({len(affected_sources)}):")
-    for s in affected_sources:
+    print(f"Affected sources ({len(affected)}):")
+    for s in affected:
         count = sum(1 for i in remove_idx if _norm(chunks[i].get("source", "")) == s)
         print(f"  [{count:>4} chunks]  {s}")
 
-    # ---- Load FAISS and sanity-check alignment -----------------------------
-    faiss_index = None
-    all_vecs    = None
 
-    if not FAISS_PATH.exists():
-        print(f"\nWarning: {FAISS_PATH} not found — only chunks.json will be updated.")
-    else:
-        faiss_index = faiss.read_index(str(FAISS_PATH))
-        n_vecs   = faiss_index.ntotal
-        n_chunks = len(chunks)
+# ---------------------------------------------------------------------------
+# Mode: offline  (data/chunks.json — has embeddings stored)
+# ---------------------------------------------------------------------------
 
-        if n_vecs != n_chunks:
-            print(
-                f"\nERROR: FAISS has {n_vecs} vectors but chunks.json has {n_chunks} entries."
-                f"\nThey are out of sync — cannot safely remove by position."
-                f"\nRe-run export_for_web.py to rebuild both from scratch, then retry."
-            )
-            sys.exit(1)
+def run_offline(prefix):
+    chunks_path = OFFLINE_DATA / "chunks.json"
 
-        print(f"\nFAISS index      : {n_vecs} vectors  dim={faiss_index.d}")
-        # Reconstruct all vectors up front (IndexFlatIP supports this)
-        all_vecs = faiss_index.reconstruct_n(0, n_vecs)   # shape (n, dim)
+    if not chunks_path.exists():
+        print(f"Error: {chunks_path} not found.")
+        sys.exit(1)
 
-    # ---- Confirm -----------------------------------------------------------
+    chunks = json.loads(chunks_path.read_text(encoding="utf-8"))
+    print(f"Loaded {len(chunks)} chunks from data/chunks.json")
+
+    keep_idx, remove_idx = _classify(chunks, prefix)
+
+    if not remove_idx:
+        print(f"No chunks match prefix {prefix!r} — nothing to do.")
+        sys.exit(0)
+
+    _print_summary(chunks, remove_idx, prefix)
+
     print()
     answer = input("Proceed? [y/N] ").strip().lower()
     if answer != "y":
         print("Aborted — no files changed.")
         sys.exit(0)
 
-    # ---- Backup ------------------------------------------------------------
-    bak_json  = CHUNKS_JSON.with_suffix(".json.bak")
-    shutil.copy2(CHUNKS_JSON, bak_json)
-    print(f"\nBacked up → {bak_json.name}")
+    # Backup
+    bak = chunks_path.with_suffix(".json.bak")
+    shutil.copy2(chunks_path, bak)
+    print(f"\nBacked up → {bak.name}")
 
+    # Write cleaned file (embeddings preserved for kept chunks)
+    kept = [chunks[i] for i in keep_idx]
+    chunks_path.write_text(json.dumps(kept, indent=2), encoding="utf-8")
+    size_mb = chunks_path.stat().st_size / 1024 / 1024
+    print(f"Saved {len(kept)} chunks → data/chunks.json  ({size_mb:.1f} MB)")
+
+    print(f"\nDone. Removed {len(remove_idx)} chunk(s).")
+    print("\nNext: rebuild webapp/data/ from the cleaned offline file (no re-embedding):")
+    print("    python scripts/export_for_web.py")
+    print("This reuses the stored embeddings — Gemini API is NOT called for existing chunks.")
+    print(f"\nTo restore backup:  copy data/{bak.name} data/chunks.json")
+
+
+# ---------------------------------------------------------------------------
+# Mode: deployed  (webapp/data/chunks.json + chunks.faiss — no embeddings in JSON)
+# ---------------------------------------------------------------------------
+
+def run_deployed(prefix):
+    chunks_path = WEBAPP_DATA / "chunks.json"
+    faiss_path  = WEBAPP_DATA / "chunks.faiss"
+
+    if not chunks_path.exists():
+        print(f"Error: {chunks_path} not found.")
+        sys.exit(1)
+
+    chunks = json.loads(chunks_path.read_text(encoding="utf-8"))
+    print(f"Loaded {len(chunks)} chunks from webapp/data/chunks.json")
+
+    keep_idx, remove_idx = _classify(chunks, prefix)
+
+    if not remove_idx:
+        print(f"No chunks match prefix {prefix!r} — nothing to do.")
+        sys.exit(0)
+
+    _print_summary(chunks, remove_idx, prefix)
+
+    # Check FAISS alignment
+    faiss_index = None
+    all_vecs    = None
+
+    if not faiss_path.exists():
+        print(f"\nWarning: {faiss_path} not found — only chunks.json will be updated.")
+    else:
+        faiss_index = faiss.read_index(str(faiss_path))
+        n_vecs   = faiss_index.ntotal
+        n_chunks = len(chunks)
+
+        if n_vecs != n_chunks:
+            print(
+                f"\nERROR: FAISS has {n_vecs} vectors but chunks.json has {n_chunks} entries — out of sync."
+                f"\nThe webapp/data/ files are already corrupted and can't be fixed by position."
+                f"\n\nFix via the offline file instead:"
+                f"\n  1. python scripts/remove_chunks.py \"{sys.argv[1]}\"   (no --deployed flag)"
+                f"\n  2. python scripts/export_for_web.py"
+                f"\nThis does NOT re-embed — it reuses embeddings stored in data/chunks.json."
+            )
+            sys.exit(1)
+
+        print(f"\nFAISS index      : {n_vecs} vectors  dim={faiss_index.d}  (aligned ✓)")
+        all_vecs = faiss_index.reconstruct_n(0, n_vecs)
+
+    print()
+    answer = input("Proceed? [y/N] ").strip().lower()
+    if answer != "y":
+        print("Aborted — no files changed.")
+        sys.exit(0)
+
+    # Backup
+    bak_json = chunks_path.with_suffix(".json.bak")
+    shutil.copy2(chunks_path, bak_json)
+    print(f"\nBacked up → {bak_json.name}")
     if faiss_index is not None:
-        bak_faiss = FAISS_PATH.with_suffix(".faiss.bak")
-        shutil.copy2(FAISS_PATH, bak_faiss)
+        bak_faiss = faiss_path.with_suffix(".faiss.bak")
+        shutil.copy2(faiss_path, bak_faiss)
         print(f"Backed up → {bak_faiss.name}")
 
-    # ---- Write filtered chunks.json ----------------------------------------
-    kept_chunks = [chunks[i] for i in keep_idx]
-    CHUNKS_JSON.write_text(json.dumps(kept_chunks, indent=2), encoding="utf-8")
-    size_kb = CHUNKS_JSON.stat().st_size / 1024
-    print(f"\nSaved {len(kept_chunks)} chunks → chunks.json  ({size_kb:.0f} KB)")
+    # Write cleaned chunks.json
+    kept = [chunks[i] for i in keep_idx]
+    chunks_path.write_text(json.dumps(kept, indent=2), encoding="utf-8")
+    size_kb = chunks_path.stat().st_size / 1024
+    print(f"\nSaved {len(kept)} chunks → chunks.json  ({size_kb:.0f} KB)")
 
-    # ---- Rebuild FAISS from kept vectors -----------------------------------
+    # Rebuild FAISS from kept vectors
     if faiss_index is not None:
-        kept_vecs = all_vecs[np.array(keep_idx)].astype(np.float32)  # fancy indexing
+        kept_vecs = all_vecs[np.array(keep_idx)].astype(np.float32)
         new_index = faiss.IndexFlatIP(kept_vecs.shape[1])
         new_index.add(kept_vecs)
-        faiss.write_index(new_index, str(FAISS_PATH))
-        size_mb = FAISS_PATH.stat().st_size / 1024 / 1024
+        faiss.write_index(new_index, str(faiss_path))
+        size_mb = faiss_path.stat().st_size / 1024 / 1024
         print(f"Rebuilt FAISS    → chunks.faiss  ({new_index.ntotal} vectors, {size_mb:.1f} MB)")
 
     print(f"\nDone. Removed {len(remove_idx)} chunk(s).")
-    print("Restart the server (or re-deploy) to pick up the changes.\n")
-    print("To restore backups if needed:")
-    print(f"  copy {bak_json.name} chunks.json")
+    print("Restart the server (or re-deploy) to pick up the changes.")
+    print(f"\nTo restore backups:")
+    print(f"  copy webapp/data/{bak_json.name} webapp/data/chunks.json")
     if faiss_index is not None:
-        print(f"  copy {bak_faiss.name} chunks.faiss")
+        print(f"  copy webapp/data/{bak_faiss.name} webapp/data/chunks.faiss")
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+
+def main():
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    flags = [a for a in sys.argv[1:] if a.startswith("--")]
+
+    if not args:
+        print(__doc__)
+        sys.exit(1)
+
+    raw_prefix = args[0]
+    prefix = _norm(raw_prefix)
+    # Auto-append slash for directory-style prefixes (no extension in final segment)
+    if not prefix.endswith("/") and "." not in Path(prefix).name:
+        prefix += "/"
+
+    deployed = "--deployed" in flags
+
+    print(f"Mode           : {'--deployed (webapp/data/)' if deployed else '--offline (data/)'}")
+    print(f"Source prefix  : {prefix!r}")
+
+    if deployed:
+        run_deployed(prefix)
+    else:
+        run_offline(prefix)
 
 
 if __name__ == "__main__":

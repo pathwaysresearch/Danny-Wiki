@@ -9,7 +9,7 @@ Run this ONCE after adding chunk tracking to catch up with pre-tracking work.
 Safe to re-run: it only adds hashes, never removes them.
 
 Usage:
-    python scripts/backfill_extracted.py [--dry-run]
+    python scripts/backfill-extracted.py [--dry-run]
 """
 
 import json
@@ -19,7 +19,7 @@ import argparse
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
-VAULT        = PROJECT_ROOT / "Vault"
+VAULT        = PROJECT_ROOT / "webapp/Vault"
 WIKI_DIR     = VAULT / "wiki"
 DATA_DIR     = PROJECT_ROOT / "data"
 CHUNKS_FILE  = DATA_DIR / "chunks.json"

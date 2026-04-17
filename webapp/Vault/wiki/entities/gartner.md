@@ -2,6 +2,8 @@
 type: entity
 aliases: [Gartner]
 relationships:
+  - target: gartner-hype-cycle
+    type: created
   - target: gartners-hype-cycle
     type: created
 tags: [organization, research-firm]
@@ -18,3 +20,6 @@ An organization that tracks technologies using its Hype Cycle, which placed "big
 
 ---
 *Extracted from: Foster Provost  Nyu Stern  Knowledge Base*
+
+---
+*Also referenced in: Foster Provost Is Bigger Really Better Predictive Analytics With Fine Grained Be 1Jzmiaflh2C*

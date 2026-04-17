@@ -51,3 +51,6 @@ A set of techniques used to extract knowledge from data, as discussed in the boo
 
 ---
 *Also referenced in: Data Analytics Made Accessible Content*
+
+---
+*Also referenced in: Data Science For Business What You Need To By Foster Provost Audiobook Preview 50Djesd L9M*
