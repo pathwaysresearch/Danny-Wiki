@@ -32900,6 +32900,24 @@
         "workflow-management"
       ],
       "path": "wiki/synthesized/robust-pipeline-covariate-shift-label-noise-mnar.md"
+    },
+    "observational-causal-inference-hierarchy": {
+      "type": "synthesized",
+      "title": "Observational Causal Inference: Credible Counterfactuals Under Weak Assumptions",
+      "aliases": [
+        "Causal Estimation Without Randomization",
+        "Observational Causal Methods Hierarchy"
+      ],
+      "tags": [
+        "causal-inference",
+        "observational-data",
+        "confounders",
+        "selection-bias",
+        "counterfactual-reasoning",
+        "quasi-experiment",
+        "data-science"
+      ],
+      "path": "wiki/synthesized/observational-causal-inference-hierarchy.md"
     }
   },
   "edges": [
@@ -66986,6 +67004,31 @@
     {
       "from": "robust-pipeline-covariate-shift-label-noise-mnar",
       "to": "algorithm-chains-and-pipelines",
+      "type": "extends"
+    },
+    {
+      "from": "observational-causal-inference-hierarchy",
+      "to": "causal-vs-predictive-targeting",
+      "type": "extends"
+    },
+    {
+      "from": "observational-causal-inference-hierarchy",
+      "to": "causal-inference",
+      "type": "extends"
+    },
+    {
+      "from": "observational-causal-inference-hierarchy",
+      "to": "causal-effect-estimation",
+      "type": "extends"
+    },
+    {
+      "from": "observational-causal-inference-hierarchy",
+      "to": "causal-impact-models",
+      "type": "extends"
+    },
+    {
+      "from": "observational-causal-inference-hierarchy",
+      "to": "predictive-analytics",
       "type": "extends"
     }
   ]
