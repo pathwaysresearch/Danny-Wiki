@@ -32881,24 +32881,21 @@
       ],
       "path": "wiki\\synthesized\\random-forest-double-decorrelation.md"
     },
-    "random-forest-generalizations": {
+    "python-vs-r-comparison": {
       "type": "synthesized",
-      "title": "Random Forest Generalizations: The Double-Decorrelation Pattern Across Domains",
+      "title": "Python vs. R: A Comparison",
       "aliases": [
-        "random-forest-variants",
-        "random-forest-extensions"
+        "Python vs R",
+        "Python and R comparison"
       ],
       "tags": [
-        "random-forest",
-        "ensemble-methods",
-        "generalization",
-        "causal-inference",
-        "anomaly-detection",
-        "survival-analysis",
-        "quantile-regression",
-        "online-learning"
+        "python",
+        "r",
+        "programming-language",
+        "data-science",
+        "statistics"
       ],
-      "path": "wiki/synthesized/random-forest-generalizations.md"
+      "path": "wiki/synthesized/python-vs-r-comparison.md"
     }
   },
   "edges": [
@@ -66963,29 +66960,19 @@
       "type": "relates-to"
     },
     {
-      "from": "random-forest-generalizations",
-      "to": "random-forest",
+      "from": "python-vs-r-comparison",
+      "to": "python",
       "type": "extends"
     },
     {
-      "from": "random-forest-generalizations",
-      "to": "random-forests",
+      "from": "python-vs-r-comparison",
+      "to": "r-language",
       "type": "extends"
     },
     {
-      "from": "random-forest-generalizations",
-      "to": "random-forest-double-decorrelation",
-      "type": "relates-to"
-    },
-    {
-      "from": "random-forest-generalizations",
-      "to": "anomaly-detection",
-      "type": "relates-to"
-    },
-    {
-      "from": "random-forest-generalizations",
-      "to": "decision-trees",
-      "type": "relates-to"
+      "from": "python-vs-r-comparison",
+      "to": "two-language-problem",
+      "type": "relates_to"
     }
   ]
 }
