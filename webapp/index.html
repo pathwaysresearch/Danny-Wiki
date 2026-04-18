@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      // Backend URL for Cloud Run. Empty string = same-origin (local dev).
+      // Replace with your Cloud Run URL after first deploy.
+      window.BACKEND_URL = "https://prof-danny-wiki-713266569877.asia-south1.run.app";
+    </script>
 </head>
 
 <body>
@@ -21,7 +26,7 @@
                 <div class="avatar">Prof</div>
                 <div class="header-text">
                     <h1>Danny</h1>
-                    <p>Data Analysis Professor</p>
+                    <p>Digital Transformation Professor</p>
                 </div>
             </div>
             <div class="header-actions">
@@ -53,7 +58,7 @@
         <main class="chat-container" id="chat-container">
             <div class="welcome-message">
                 <h2>Ask Prof. Danny</h2>
-                <p>Any Questions about Data Analysis</p>
+                <p>Any Questions about Digital Transformation</p>
             </div>
         </main>
 
