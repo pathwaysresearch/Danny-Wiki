@@ -1,7 +1,7 @@
 """
 Export wiki pages + RAG chunks → webapp/data/ for Vercel deployment.
 
-Reads wiki/*.md and data/chunks.json, generates embeddings for wiki pages,
+Reads wiki/*.md and data/chunks.json,
 writes:
   - webapp/data/chunks.json      (RAG text only, NO embeddings, ~19MB)
   - webapp/data/chunks.faiss     (FAISS inner-product index of chunk embeddings)
