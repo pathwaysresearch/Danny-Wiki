@@ -32881,20 +32881,24 @@
       ],
       "path": "wiki\\synthesized\\random-forest-double-decorrelation.md"
     },
-    "data-science-three-pillar-framework": {
+    "random-forest-generalizations": {
       "type": "synthesized",
-      "title": "Data Science: Three-Pillar Framework",
+      "title": "Random Forest Generalizations: The Double-Decorrelation Pattern Across Domains",
       "aliases": [
-        "Three Pillars of Data Science",
-        "Data Science First Principles"
+        "random-forest-variants",
+        "random-forest-extensions"
       ],
       "tags": [
-        "data-science",
-        "methodology",
-        "framework",
-        "first-principles"
+        "random-forest",
+        "ensemble-methods",
+        "generalization",
+        "causal-inference",
+        "anomaly-detection",
+        "survival-analysis",
+        "quantile-regression",
+        "online-learning"
       ],
-      "path": "wiki/synthesized/data-science-three-pillar-framework.md"
+      "path": "wiki/synthesized/random-forest-generalizations.md"
     }
   },
   "edges": [
@@ -66959,24 +66963,29 @@
       "type": "relates-to"
     },
     {
-      "from": "data-science-three-pillar-framework",
-      "to": "data-science",
+      "from": "random-forest-generalizations",
+      "to": "random-forest",
       "type": "extends"
     },
     {
-      "from": "data-science-three-pillar-framework",
-      "to": "data-analytic-thinking",
+      "from": "random-forest-generalizations",
+      "to": "random-forests",
       "type": "extends"
     },
     {
-      "from": "data-science-three-pillar-framework",
-      "to": "data-science-for-business",
-      "type": "extends"
+      "from": "random-forest-generalizations",
+      "to": "random-forest-double-decorrelation",
+      "type": "relates-to"
     },
     {
-      "from": "data-science-three-pillar-framework",
-      "to": "expected-value-framework",
-      "type": "extends"
+      "from": "random-forest-generalizations",
+      "to": "anomaly-detection",
+      "type": "relates-to"
+    },
+    {
+      "from": "random-forest-generalizations",
+      "to": "decision-trees",
+      "type": "relates-to"
     }
   ]
 }
