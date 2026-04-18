@@ -32881,21 +32881,21 @@
       ],
       "path": "wiki\\synthesized\\random-forest-double-decorrelation.md"
     },
-    "overfitting-prevention-strategies": {
+    "logistic-regression-conceptual-arc": {
       "type": "synthesized",
-      "title": "Overfitting Prevention Strategies",
+      "title": "Logistic Regression: Full Conceptual Arc",
       "aliases": [
-        "Avoiding Overfitting",
-        "Overfitting Mitigation"
+        "Logistic Regression Overview",
+        "Logistic Regression End-to-End"
       ],
       "tags": [
         "machine-learning",
-        "overfitting",
-        "regularization",
-        "model-tuning",
-        "generalization"
+        "logistic-regression",
+        "classification",
+        "modeling",
+        "synthesis"
       ],
-      "path": "wiki/synthesized/overfitting-prevention-strategies.md"
+      "path": "wiki/synthesized/logistic-regression-conceptual-arc.md"
     }
   },
   "edges": [
@@ -66960,43 +66960,43 @@
       "type": "relates-to"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "overfitting",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "logistic-regression",
       "type": "extends"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "regularization",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "logistic-function",
       "type": "extends"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "pre-pruning",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "standard-logistic-function",
       "type": "extends"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "post-pruning",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "logit",
       "type": "extends"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "ensemble-learning",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "log-odds",
       "type": "extends"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "model-complexity",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "generalized-linear-model-glm",
       "type": "extends"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "overfitting-and-underfitting",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "gradient-descent",
       "type": "extends"
     },
     {
-      "from": "overfitting-prevention-strategies",
-      "to": "l1-regularization-lasso",
+      "from": "logistic-regression-conceptual-arc",
+      "to": "logistic-regression-cv",
       "type": "extends"
     }
   ]
