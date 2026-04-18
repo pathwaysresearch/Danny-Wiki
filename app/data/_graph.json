@@ -32881,21 +32881,20 @@
       ],
       "path": "wiki\\synthesized\\random-forest-double-decorrelation.md"
     },
-    "vasant-dhar-thesis-thinking-with-machines": {
+    "data-science-three-pillar-framework": {
       "type": "synthesized",
-      "title": "Vasant Dhar's Thesis: Thinking With Machines",
+      "title": "Data Science: Three-Pillar Framework",
       "aliases": [
-        "Dhar's AI Philosophy",
-        "Thinking With Machines Thesis"
+        "Three Pillars of Data Science",
+        "Data Science First Principles"
       ],
       "tags": [
-        "ai",
-        "education",
-        "epistemology",
-        "human-computer-interaction",
-        "synthesis"
+        "data-science",
+        "methodology",
+        "framework",
+        "first-principles"
       ],
-      "path": "wiki/synthesized/vasant-dhar-thesis-thinking-with-machines.md"
+      "path": "wiki/synthesized/data-science-three-pillar-framework.md"
     }
   },
   "edges": [
@@ -66960,34 +66959,24 @@
       "type": "relates-to"
     },
     {
-      "from": "vasant-dhar-thesis-thinking-with-machines",
-      "to": "vasant-dhar",
-      "type": "synthesizes"
-    },
-    {
-      "from": "vasant-dhar-thesis-thinking-with-machines",
-      "to": "thinking-with-machines",
+      "from": "data-science-three-pillar-framework",
+      "to": "data-science",
       "type": "extends"
     },
     {
-      "from": "vasant-dhar-thesis-thinking-with-machines",
-      "to": "damodaran-bot",
-      "type": "illustrates"
-    },
-    {
-      "from": "vasant-dhar-thesis-thinking-with-machines",
-      "to": "learning-with-machines",
+      "from": "data-science-three-pillar-framework",
+      "to": "data-analytic-thinking",
       "type": "extends"
     },
     {
-      "from": "vasant-dhar-thesis-thinking-with-machines",
-      "to": "curiosity-in-the-age-of-ai",
-      "type": "centers-on"
+      "from": "data-science-three-pillar-framework",
+      "to": "data-science-for-business",
+      "type": "extends"
     },
     {
-      "from": "vasant-dhar-thesis-thinking-with-machines",
-      "to": "ai-as-an-amplifier-of-knowledge",
-      "type": "relates-to"
+      "from": "data-science-three-pillar-framework",
+      "to": "expected-value-framework",
+      "type": "extends"
     }
   ]
 }
