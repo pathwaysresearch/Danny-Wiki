@@ -2680,3 +2680,5 @@ Master catalog — 2662 pages · last rebuilt 2026-04-21
 - [[stubs/stub-ǂthe-ǂhundred-page-machine-learning-book-andriy-burkov-lugar-de-publicacion-no-i|The Hundred-Page Machine Learning Book — Andriy Burkov]] — This is Andriy Burkov's concise yet comprehensive introduction to machine learning, covering the field from foundational
 
 - [[synthesized/data-science-roadmap|Data Science Roadmap]] — synthesized from query
+
+- [[synthesized/pd-grouper-generalization|pd.Grouper: Generalization of pd.TimeGrouper]] — synthesized from query

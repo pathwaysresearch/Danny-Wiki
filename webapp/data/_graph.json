@@ -32897,6 +32897,22 @@
         "python"
       ],
       "path": "wiki/synthesized/data-science-roadmap.md"
+    },
+    "pd-grouper-generalization": {
+      "type": "synthesized",
+      "title": "pd.Grouper: Generalization of pd.TimeGrouper",
+      "aliases": [
+        "TimeGrouper deprecation",
+        "pd.Grouper unified interface"
+      ],
+      "tags": [
+        "pandas",
+        "groupby",
+        "time-series",
+        "deprecation",
+        "data-wrangling"
+      ],
+      "path": "wiki/synthesized/pd-grouper-generalization.md"
     }
   },
   "edges": [
@@ -66973,6 +66989,26 @@
     {
       "from": "data-science-roadmap",
       "to": "expected-value-framework",
+      "type": "extends"
+    },
+    {
+      "from": "pd-grouper-generalization",
+      "to": "groupby-operation",
+      "type": "extends"
+    },
+    {
+      "from": "pd-grouper-generalization",
+      "to": "groupby",
+      "type": "extends"
+    },
+    {
+      "from": "pd-grouper-generalization",
+      "to": "groupby-object",
+      "type": "extends"
+    },
+    {
+      "from": "pd-grouper-generalization",
+      "to": "rolling-window-operations",
       "type": "extends"
     }
   ]
