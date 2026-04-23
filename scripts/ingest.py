@@ -46,6 +46,9 @@ DATA_DIR = PROJECT_ROOT / "data"
 CHUNKS_FILE = DATA_DIR / "chunks.json"
 INGESTED_FILE = DATA_DIR / "ingested.json"
 
+WORD_THRESHOLD = 5000
+PAGE_THRESHOLD = 20
+
 SUPPORTED_EXTENSIONS = {".md", ".txt", ".pdf"}
 
 # Gemini embedding-2-preview has a 2048-token (~7500 char) input limit.

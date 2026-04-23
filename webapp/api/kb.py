@@ -325,7 +325,6 @@ class WikiSearchIndex:
         top_idx = np.argsort(rrf_scores)[::-1][:top_k]
         return [self.pages[i] for i in top_idx]
 
-
 # ---------------------------------------------------------------------------
 # KnowledgeBase — thread-safe in-memory state
 # ---------------------------------------------------------------------------
