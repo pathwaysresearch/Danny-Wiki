@@ -201,6 +201,7 @@ def save_graph(graph=None):
     """Build (if needed) and save graph to _graph.json."""
     if graph is None:
         graph = build_graph()
+    GRAPH_PATH.parent.mkdir(parents=True, exist_ok=True)
     GRAPH_PATH.write_text(
         json.dumps(graph, indent=2, ensure_ascii=False),
         encoding="utf-8",
@@ -243,6 +244,7 @@ def update_graph() -> dict:
             existing["edges"].append(edge)
             seen.add(key)
 
+    GRAPH_PATH.parent.mkdir(parents=True, exist_ok=True)
     GRAPH_PATH.write_text(
         json.dumps(existing, indent=2, ensure_ascii=False),
         encoding="utf-8",

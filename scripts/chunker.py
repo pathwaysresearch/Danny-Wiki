@@ -288,7 +288,10 @@ def count_words(file_path):
                 pass
         return 10_000  # assume large if unreadable
     if ext in (".md", ".txt"):
-        return len(Path(file_path).read_text(encoding="utf-8").split())
+        try:
+            return len(Path(file_path).read_text(encoding="utf-8").split())
+        except OSError:
+            return 0
     return 0
 
 

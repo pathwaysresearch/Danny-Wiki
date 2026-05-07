@@ -125,10 +125,16 @@ RULES:
 - Extract ONLY concepts and entities that are substantively discussed (not just mentioned in passing)
 - A **concept** is an idea, theory, model, method, principle, or technique (e.g., "Discounted Cash Flow", "CAPM", "Heteroscedasticity", "Hedging")
 - An **entity** is a person, institution, instrument, regulation, or named thing (e.g., "William Sharpe", "NYSE", "Basel III", "Black-Scholes Model")
-- For each, provide a clear 1-2 sentence description on a SINGLE LINE (no newlines inside strings). Based ONLY on what the text says
+- For each item write TWO text fields:
+    - `description`: a 1-2 sentence summary for indexing and disambiguation (one line, no newlines)
+    - `body`: a rich wiki page body — minimum 3 `##` sections drawn from what the text actually says.
+      Typical sections for **concepts**: Definition, How It Works, Key Properties, Applications, Limitations.
+      Typical sections for **entities**: Overview, Contributions / Role, Key Works or Decisions, Legacy or Significance.
+      Adapt section headings to what the text covers. Write substantive paragraphs, not bullet lists.
+      Ground every claim in the provided excerpts — do not invent content.
 - Identify relationships between extracted items AND to previously known items
 - Use kebab-case for slugs (e.g., "discounted-cash-flow", "william-sharpe")
-- Keep ALL string values on a single line — no line breaks inside JSON strings
+- JSON encoding: escape all newlines as \\n inside string values — no literal line breaks inside JSON strings
 
 Respond with ONLY valid JSON in this exact format (no markdown, no commentary):
 {{
@@ -136,7 +142,8 @@ Respond with ONLY valid JSON in this exact format (no markdown, no commentary):
     {{
       "slug": "discounted-cash-flow",
       "name": "Discounted Cash Flow",
-      "description": "A valuation method that estimates...",
+      "description": "A valuation method that estimates the present value of future cash flows by discounting them at a rate reflecting risk.",
+      "body": "## Definition\\n\\nDiscounted Cash Flow (DCF) is a valuation method that estimates the intrinsic value of an asset by projecting its future cash flows and discounting them back to the present at a rate that reflects the risk of those flows.\\n\\n## How It Works\\n\\nThe analyst forecasts free cash flows over an explicit projection period, then estimates a terminal value beyond that horizon. Both are discounted at the weighted average cost of capital (WACC). Summing these gives enterprise value; subtracting net debt yields equity value.\\n\\n## Key Properties\\n\\nDCF is highly sensitive to the assumed discount rate and terminal growth rate. Small changes in either assumption can swing valuation substantially, making the method powerful but also prone to garbage-in-garbage-out errors.\\n\\n## Applications\\n\\nUsed in corporate M\\u0026A, LBO analysis, project capital budgeting, and equity research to assess whether a security is under- or over-valued relative to its intrinsic worth.",
       "relationships": [
         {{"target": "capm", "type": "uses"}},
         {{"target": "wacc", "type": "depends_on"}}
@@ -148,7 +155,8 @@ Respond with ONLY valid JSON in this exact format (no markdown, no commentary):
     {{
       "slug": "william-sharpe",
       "name": "William Sharpe",
-      "description": "Nobel laureate who developed...",
+      "description": "Nobel laureate economist who developed the Capital Asset Pricing Model relating expected return to systematic risk.",
+      "body": "## Overview\\n\\nWilliam Forsyth Sharpe is an American economist and Professor Emeritus of Finance at Stanford Graduate School of Business. He was awarded the Nobel Memorial Prize in Economic Sciences in 1990.\\n\\n## Contributions\\n\\nSharpe developed the Capital Asset Pricing Model (CAPM) in his 1964 paper, providing the first formal framework for pricing risky assets by decomposing return into a risk-free rate plus a premium proportional to beta. He also introduced the Sharpe ratio as a standard measure of risk-adjusted return.\\n\\n## Legacy\\n\\nCAPM became the cornerstone of modern portfolio theory and is still the most widely taught asset pricing model. The Sharpe ratio is used universally by fund managers and analysts to compare investment strategies on a risk-adjusted basis.",
       "relationships": [
         {{"target": "capm", "type": "created"}}
       ],
@@ -252,7 +260,7 @@ def call_gemini(prompt: str, api_key: str) -> dict:
     url = GEMINI_URL_TEMPLATE.format(model=GEMINI_MODEL, key=api_key)
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.1, "maxOutputTokens": 8192},
+        "generationConfig": {"temperature": 0.1, "maxOutputTokens": 65536},
     }
 
     for attempt in range(3):
@@ -397,10 +405,11 @@ def generate_wiki_page(item: dict, item_type: str, source_name: str) -> str:
     slug = item["slug"]
     name = item["name"]
     desc = item["description"]
+    body = item.get("body", desc)  # rich content; falls back to description if absent
     relationships = item.get("relationships", [])
     tags = item.get("tags", [])
 
-    lines = ["---", f"type: {item_type}", f"aliases: [{name}]"]
+    lines = ["---", f"type: {item_type}", f"aliases: [{name}]", f"summary: {desc}"]
 
     if relationships:
         lines.append("relationships:")
@@ -411,7 +420,7 @@ def generate_wiki_page(item: dict, item_type: str, source_name: str) -> str:
     if tags:
         lines.append(f"tags: [{', '.join(tags)}]")
 
-    lines += [f"sourced_from: {source_name}", "---", "", f"# {name}", "", desc, ""]
+    lines += [f"sourced_from: {source_name}", "---", "", f"# {name}", "", body, ""]
 
     if relationships:
         lines.append("## Relationships")
